@@ -1,0 +1,29 @@
+Name:     loopgotowhile-server
+Version:  0.1
+Synopsis: Online evaluation service for loopgotowhile (https://github.com/eugenkiss/loopgotowhile)
+
+Homepage:     https://github.com/eugenkiss/loopgotowhile-site
+License:      BSD3
+License-file: LICENSE
+Maintainer:   Eugen Kiss (eugen@eugenkiss.com)
+Author:       Eugen Kiss (eugen@eugenkiss.com)
+Category:     Web
+
+Cabal-Version: >= 1.2
+Build-Type:    Simple
+
+Source-Repository head
+    Type:     git
+    Location: https://github.com/eugenkiss/loopgotowhile-site
+    Branch:   master
+
+Executable LGWServer
+    Main-Is:     LGWServer.hs
+    GHC-Options: -Wall -O2 -static -optc-static -optl-static -fvia-C -optl-pthread -rtsopts -funbox-strict-fields 
+    Build-Depends: 
+        base >= 4.0,
+        haskell98,
+        mtl,
+        split,
+        happstack-server,
+        loopgotowhile

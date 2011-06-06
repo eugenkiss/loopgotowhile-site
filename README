@@ -1,0 +1,30 @@
+Limiting Resources
+------------------
+
+Also the computation will time out if it takes longer than five seconds.
+
+These options make the executable static and limit the heap size to 5m.
+
+TODO: Put this in cabal
+
+ghc -O2 --make -static -optc-static -optl-static LGWServer.hs -fvia-C -optl-pthread +RTS -M5m
+
+
+To limit the cpu resources you can use the program `cpulimit`
+
+For further information look [here](http://maketecheasier.com/limit-cpu-usage-of-any-process-in-linux/2010/09/22).
+
+
+Other
+-----
+
+If you get an error like mkTextEncoding: invalid argument from the statically-linked binaries, try setting the GCONV_PATH environment variable to point to the location of the codecs from the libc package, e.g. /usr/lib/gconv; see http://blog.malde.org/index.php/2010/05/22/snagged/
+
+put `export GCONV_PATH=/usr/lib/gconv` at the top of your bashrc on the remote.
+
+
+Very flaky to get both processes LGWServer and cpulimit running with fabric. Only
+works every fourth time or so.
+
+
+Asshole ghc: http://hackage.haskell.org/trac/ghc/ticket/698

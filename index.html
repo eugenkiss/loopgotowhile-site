@@ -1,0 +1,105 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <title>Loop, Goto & While</title>
+  <meta name="description" content="Interpreters for three simple programming languages">
+  <meta name="author" content="Eugen Kiss">
+</head>
+
+<body>
+
+  <div id="container">
+    <header>
+    Loop, Goto &amp; While
+    </header>
+    <div id="main" role="main">
+      <form enctype="multipart/form-data" method="POST" id="source-form" action="/loop/extended">
+        <div style="width:500px">
+          Input language is
+          <select name="language" id="source-lang">
+            <option value="loop">Loop</option>
+            <option value="goto">Goto</option>
+            <option value="while">While</option>
+          </select>
+          <input type="checkbox" name="strict" value="strict" id="strict"/> strict <br />
+          <textarea name="source" id="source-code" rows="20" style="width:495px"></textarea><br>
+          <div style="float:left">
+            <input type="submit" value="Run" id="run"/>
+            with args 
+            <input name="args" type="text" id="source-args" size="4"/>
+          </div>
+          <div style="float:right">
+            <input type="submit" value="Transform" id="transform"/> into
+            <select name="language" id="target-lang">
+            <option value="strict">Strict</option>
+            <option value="loop">Loop</option>
+            <option value="goto">Goto</option>
+            <option value="while">While</option>
+            </select>
+          </div>
+        </div>
+      </form>
+      <div style="clear:both;height:20px"></div>
+
+      Output:<br>
+      <textarea name="source" id="output" rows="10" style="width:495px"></textarea>
+    </div>
+    <footer>
+
+    </footer>
+  </div> 
+
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.6.1.min.js">\x3C/script>')</script>
+
+  <script>
+  $(document).ready(function(){
+    $("#run").click(function(){
+      var sourceCode = $("#source-code").val();
+      var args = $("#source-args").val();
+      var lang = $("#source-lang").val();
+      var url = lang + "/";
+      if ($("#strict").attr("checked")) {
+        url += "strict";
+      }
+      else {
+        url += "extended";
+      }
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: { source: sourceCode, args: args },
+        success: function(data) {
+          $("#output").val(data);
+        },
+        error: function(xhr) {
+          $("#output").val("Error: " + xhr.responseText);
+        }
+      });
+      return false;
+    });
+
+    $("#transform").click(function(){
+      var sourceCode = $("#source-code").val();
+      var sourceLang = $("#source-lang").val();
+      var targetLang = $("#target-lang").val();
+      var url = sourceLang + "/to/" + targetLang;
+      //alert(url);
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: { source: sourceCode },
+        success: function(data) {
+          $("#output").val(data);
+        },
+        error: function(xhr) {
+          $("#output").val("Error: " + xhr.responseText);
+        }
+      });
+      return false;
+    });
+  });
+  </script>
+</body>
+</html>

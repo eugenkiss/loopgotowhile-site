@@ -1,0 +1,9 @@
+- Content / Design 
+    - Maybe use Templating Engine to extract content from index.html
+    - use this javascript script editor with highlighting and line numbers see other Todo of loopgotowhile
+    - make error red
+    - put all the style in css
+- I dont' like the current way of limiting computations with mvar. There is one
+  global, although it would be enough if there was one per user
+- create readme
+- push to github as loopgotowhile-site
