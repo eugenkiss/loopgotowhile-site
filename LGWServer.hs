@@ -1,3 +1,4 @@
+{-# LANGUAGE DoAndIfThenElse #-}
 import System.Timeout (timeout)
 import Control.Concurrent.MVar
 import Control.Monad.Trans (liftIO)
@@ -76,8 +77,8 @@ handlers mvar = msum
     , anyPath $ dir "to" $ anyPath $ 
           badRequest $ toResponse "Impossible transformation!"
 
-    {-, nullDir >> serveFile (asContentType "text/html") "index.html"-}
-    {-, dir "style.css" $ serveFile (asContentType "text/css") "style.css"-}
+    , nullDir >> serveFile (asContentType "text/html") "index.html"
+    , dir "style.css" $ serveFile (asContentType "text/css") "style.css"
     , badRequest $ toResponse "Nothing here!"
     ]
 
@@ -86,16 +87,16 @@ myPolicy = (defaultBodyPolicy "/tmp/" 0 100000 1000)
 
 runCode :: MVar () -> (String -> [Integer] -> Either String Integer) -> ServerPart Response
 runCode mvar runner = do 
-    methodM POST
-    decodeBody myPolicy
-    source    <- look "source"
-    arguments <- look "args"
-    case parseArgs arguments of
-      Left s     -> badRequest $ toResponse s
-      Right args -> do
-        wasFree <- liftIO $! tryPutMVar mvar ()
-        liftIO $! print wasFree
-        if wasFree then do
+    wasFree <- liftIO $! tryPutMVar mvar ()
+    liftIO $! print wasFree
+    if wasFree then do
+       methodM POST
+       decodeBody myPolicy
+       source    <- look "source"
+       arguments <- look "args"
+       case parseArgs arguments of
+         Left s     -> badRequest $ toResponse s
+         Right args -> do
            result <- liftIO $! timeout (1000 * timeLimit) $! do
                let s = either id show $ runner source args
                print s -- WTF!!! do I need this line so that *** timeout works!?!?!
@@ -105,16 +106,16 @@ runCode mvar runner = do
            case result of
              Nothing -> badRequest $ toResponse "Computation took too long!"
              Just x  -> ok $ toResponse x
-           else badRequest $ toResponse "Server is busy!"
+    else badRequest $ toResponse "Server is busy!"
 
 transformCode :: MVar () -> (String -> Either String String) -> ServerPart Response
 transformCode mvar runner = do 
-    methodM POST
-    decodeBody myPolicy
-    source <- look "source"
     wasFree <- liftIO $! tryPutMVar mvar ()
     liftIO $! print wasFree
     if wasFree then do
+       methodM POST
+       decodeBody myPolicy
+       source <- look "source"
        result <- liftIO $! timeout (1000 * timeLimit) $! do
            let s = either id id $ runner source
            print s -- WTF!!! do I need this line so that *** timeout works!?!?! 
@@ -124,7 +125,7 @@ transformCode mvar runner = do
        case result of
          Nothing -> badRequest $ toResponse "Computation took too long!"
          Just x  -> ok $ toResponse x
-       else badRequest $ toResponse "Server is busy!"
+    else badRequest $ toResponse "Server is busy!"
 
 parseArgs :: String -> Either String [Integer]
 parseArgs "" = Right []

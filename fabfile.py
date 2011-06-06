@@ -6,6 +6,7 @@ PROD = 'root@eugenkiss.com:223'
 DEST_PATH = '/var/www/loopgotowhile/'
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 DEPLOY_PATH = os.path.join(ROOT_PATH, 'deploy')
+TEST_PATH = os.path.join(ROOT_PATH, 'test')
 NGINX_CONF_PATH = '/etc/nginx/sites-available/loopgotowhile'
 
 @hosts(PROD)
@@ -29,6 +30,17 @@ def copy():
                   os.path.join(DEPLOY_PATH, 'style.css'))
     local('cp ' + os.path.join(ROOT_PATH, 'dist/build/LGWServer/LGWServer') + ' ' +
                   os.path.join(DEPLOY_PATH, 'LGWServer'))
+
+def test():
+    local('mkdir -p ' + TEST_PATH)
+    local('cp ' + os.path.join(ROOT_PATH, 'index.html') + ' ' +
+                  os.path.join(TEST_PATH, 'index.html'))
+    local('cp ' + os.path.join(ROOT_PATH, 'style.css') + ' ' +
+                  os.path.join(TEST_PATH, 'style.css'))
+    local('cp ' + os.path.join(ROOT_PATH, 'dist/build/LGWServer/LGWServer') + ' ' +
+                  os.path.join(TEST_PATH, 'LGWServer'))
+
+
 
 @hosts(PROD)
 def publish():

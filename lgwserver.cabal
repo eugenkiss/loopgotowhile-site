@@ -2,7 +2,7 @@ Name:     loopgotowhile-server
 Version:  0.1
 Synopsis: Online evaluation service for loopgotowhile (https://github.com/eugenkiss/loopgotowhile)
 
-Homepage:     https://github.com/eugenkiss/loopgotowhile-site
+Homepage:     loopgotowhile.eugenkiss.com
 License:      BSD3
 License-file: LICENSE
 Maintainer:   Eugen Kiss (eugen@eugenkiss.com)
