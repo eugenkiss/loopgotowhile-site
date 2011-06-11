@@ -1,9 +1,11 @@
 - Content / Design 
-    - Maybe use Templating Engine to extract content from index.html
-    - use this javascript script editor with highlighting and line numbers see other Todo of loopgotowhile
-    - make error red
-    - put all the style in css
+    - codemirror.net
+    - make error red (make parse error also error in code)
+    - finish content
 - I dont' like the current way of limiting computations with mvar. There is one
-  global, although it would be enough if there was one per user
+  global, but I would like to have like 4 global MVars and only if all are
+  not empty not allow compuation
 - create readme
 - push to github as loopgotowhile-site
+- prevent site being available from :8000 (maybe set 127.0.0.1:8000)
+- maybe change to yesod
