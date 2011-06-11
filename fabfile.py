@@ -32,6 +32,9 @@ def copy():
                   os.path.join(DEPLOY_PATH, 'LGWServer'))
 
 def test():
+    with settings(warn_only=True):
+        local('killall -9 -v LGWServer ')
+    compile()
     local('mkdir -p ' + TEST_PATH)
     local('cp ' + os.path.join(ROOT_PATH, 'index.html') + ' ' +
                   os.path.join(TEST_PATH, 'index.html'))
@@ -39,7 +42,7 @@ def test():
                   os.path.join(TEST_PATH, 'style.css'))
     local('cp ' + os.path.join(ROOT_PATH, 'dist/build/LGWServer/LGWServer') + ' ' +
                   os.path.join(TEST_PATH, 'LGWServer'))
-
+    local(os.path.join(TEST_PATH, 'LGWServer'))
 
 
 @hosts(PROD)
