@@ -79,6 +79,16 @@ handlers mvar = msum
 
     , nullDir >> serveFile (asContentType "text/html") "index.html"
     , dir "style.css" $ serveFile (asContentType "text/css") "style.css"
+    , dirs "codemirror/codemirror.css" $ serveFile (asContentType "text/css") "codemirror/codemirror.css"
+    , dirs "codemirror/theme.css" $ serveFile (asContentType "text/css") "codemirror/theme.css"
+    , dirs "codemirror/codemirror.js" $ serveFile (asContentType "text/javascript") "codemirror/codemirror.js"
+    , dirs "codemirror/loop.js" $ serveFile (asContentType "text/javascript") "codemirror/loop.js"
+    , dirs "codemirror/loop-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/loop-strict.js"
+    , dirs "codemirror/goto.js" $ serveFile (asContentType "text/javascript") "codemirror/goto.js"
+    , dirs "codemirror/goto-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/goto-strict.js"
+    , dirs "codemirror/while.js" $ serveFile (asContentType "text/javascript") "codemirror/while.js"
+    , dirs "codemirror/while-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/while-strict.js"
+
     , badRequest $ toResponse "Nothing here!"
     ]
 

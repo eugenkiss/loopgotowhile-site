@@ -1,11 +1,15 @@
-- Content / Design 
-    - codemirror.net
-    - make error red (make parse error also error in code)
-    - finish content
-- I dont' like the current way of limiting computations with mvar. There is one
-  global, but I would like to have like 4 global MVars and only if all are
-  not empty not allow compuation
+- make error red (make parse error also error in code)
+- finish content
 - create readme
 - push to github as loopgotowhile-site
-- prevent site being available from :8000 (maybe set 127.0.0.1:8000)
+- I dont' like the current way of limiting computations with mvar. There is one
+  global, but I would like to have like 4 global MVars and only if all are
+  not empty not allow compuation or have an MVar that is local to a process (or
+  is it by default?), so that when I have 2 processes 2 concurrent compuatoins
+  can occure but no more.
+- codemirror.net
+    - put focus automatically on editor
+    - switch modes when selecting another input language or checking strict
+    - write loop, loope, while, whilee, goto, gotoe modes
+        - change enterMode from "keep" to "indent" and tabMode from "shift" to "indent"
 - maybe change to yesod

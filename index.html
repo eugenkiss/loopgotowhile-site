@@ -4,6 +4,10 @@
   <title>Loop, Goto & While</title>
   <meta name="description" content="Interpreters for three simple programming languages">
   <meta name="author" content="Eugen Kiss">
+  <!-- Code Mirror -->
+  <link rel="stylesheet" href="codemirror/codemirror.css">
+  <link rel="stylesheet" href="codemirror/theme.css">
+  <!-- End of Code Mirror -->
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
@@ -40,6 +44,7 @@
       <li><a href="#exercises">Exercises</a>
       <ul>
     </nav>
+    <hr/>
     <div id="main" role="main">
       <form enctype="multipart/form-data" method="POST" id="source-form" action="/loop/extended">
         <div style="float:right;padding-top:0.5em;">
@@ -49,8 +54,8 @@
             <option value="goto">Goto</option>
             <option value="while">While</option>
           </select>
-          <label><input type="checkbox" name="strict" value="strict" id="strict"/>strict</label><br />
-        </div>
+          <label><input type="checkbox" name="strict" value="strict" id="strict"/>strict</label>
+        </div><br/><br/>
         <textarea name="source" id="source-code" rows="20"></textarea><br>
         <div style="float:left">
           <input type="submit" value="Run" id="run"/>
@@ -181,6 +186,7 @@ it is or not.
 <!-- End of Content -->
     </div>
     <footer>
+    <hr/>
     <a href="https://github.com/eugenkiss/loopgotowhile">Source Code of the site</a> &bull;
     <a href="https://github.com/eugenkiss/loopgotowhile-site">Source Code of the interpreters</a> &bull;
     <a href="http://eugenkiss.com/blog/2011/loop-goto-and-while/">Blog Post about this project</a>
@@ -190,12 +196,32 @@ it is or not.
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/libs/jquery-1.6.1.min.js">\x3C/script>')</script>
+  <!-- Code Mirror -->
+  <script src="codemirror/codemirror.js"></script>
+  <script src="codemirror/loop.js"></script>
+  <script src="codemirror/loop-strict.js"></script>
+  <script src="codemirror/goto.js"></script>
+  <script src="codemirror/goto-strict.js"></script>
+  <script src="codemirror/while.js"></script>
+  <script src="codemirror/while-strict.js"></script>
+  <!-- End of Code Mirror -->
 
   <script>
   $(document).ready(function(){
 
+    /****** Code Mirror ******/
+    var myCodeMirror = CodeMirror.fromTextArea($("#source-code").get(0), {
+      lineNumbers: true,
+      matchBrackets: true,
+      enterMode: "keep",
+      tabMode: "shift",
+      theme: "theme",
+      mode: "loop"
+    });
+
     /****** Ajax ******/ 
     $("#run").click(function(){
+      myCodeMirror.save();
       var sourceCode = $("#source-code").val();
       var args = $("#source-args").val();
       var lang = $("#source-lang").val();
@@ -221,6 +247,7 @@ it is or not.
     });
 
     $("#transform").click(function(){
+      myCodeMirror.save();
       var sourceCode = $("#source-code").val();
       var sourceLang = $("#source-lang").val();
       var targetLang = $("#target-lang").val();
@@ -245,6 +272,7 @@ it is or not.
       event.preventDefault();
       $('html,body').animate({scrollTop:$(this.hash).offset().top}, 500);
     });
+
   });
   </script>
 </body>

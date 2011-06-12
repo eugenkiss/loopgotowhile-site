@@ -15,7 +15,7 @@ def update_nginx_conf():
     run('/etc/init.d/nginx reload')
 
 def backup():
-    local('git push ~/Dropbox/backup/loopgotowhile-site.git')
+    local('git push -f ~/Dropbox/backup/loopgotowhile-site.git')
 
 def compile():
     local('cabal configure')
@@ -56,7 +56,7 @@ def publish():
     with settings(warn_only=True):
         run('killall -9 -v LGWServer ')
         run('killall -9 -v cpulimit ')
-    #backup()
+    backup()
     compile()
     copy()
     project.rsync_project(
@@ -67,7 +67,5 @@ def publish():
     update_nginx_conf()
     # Limit cpu usage (cpulimit must be installed on remote)
     run('nohup cpulimit -e LGWServer -l 20 >& /dev/null < /dev/null &')
-    run('sleep 1s')
     # Run LGWServer in background and limit heap size
     run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS M30m -RTS >& /dev/null < /dev/null &')
-    run('sleep 1s')

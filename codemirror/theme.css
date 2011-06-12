@@ -1,0 +1,18 @@
+/*.cm-s-theme { background: #0a001f; color: #f8f8f8; }*/
+/*.cm-s-theme span.CodeMirror-selected { background: #a8f !important; }*/
+.cm-s-theme .CodeMirror-gutter { background: rgba(0,0,0,0.1); border-right: 1px solid rgba(0,0,0,0.3); }
+.cm-s-theme .CodeMirror-gutter-text { color: lightgreen; }
+.cm-s-theme .CodeMirror-cursor { border-left: 6px solid rgba(0,255,0,0.15) !important; }
+
+.cm-s-theme span.cm-comment { color: #6900a1; }
+.cm-s-theme span.cm-atom { color: #845dc4; }
+.cm-s-theme span.cm-number { color: #ffd500; }
+.cm-s-theme span.cm-keyword { color: #599eff; }
+.cm-s-theme span.cm-string { color: #37f14a; }
+.cm-s-theme span.cm-meta { color: #7678e2; }
+.cm-s-theme span.cm-variable-2 { color: #99b2ff; }
+.cm-s-theme span.cm-variable-3, .cm-s-night span.cm-def { white; }
+.cm-s-theme span.cm-error { color: #9d1e15; }
+.cm-s-theme span.cm-bracket { color: #8da6ce; }
+.cm-s-theme span.cm-comment { color: #6900a1; }
+.cm-s-theme span.cm-builtin, .cm-s-night span.cm-special { color: #ff9e59; }

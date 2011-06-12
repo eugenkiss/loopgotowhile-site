@@ -18,6 +18,10 @@ For further information look [here](http://maketecheasier.com/limit-cpu-usage-of
 Other
 -----
 
+codemirror.net is used for the editor functionality.
+
+design inspired by homebrew
+
 If you get an error like mkTextEncoding: invalid argument from the statically-linked binaries, try setting the GCONV_PATH environment variable to point to the location of the codecs from the libc package, e.g. /usr/lib/gconv; see http://blog.malde.org/index.php/2010/05/22/snagged/
 
 put `export GCONV_PATH=/usr/lib/gconv` at the top of your bashrc on the remote.
