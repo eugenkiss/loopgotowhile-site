@@ -1,34 +1,66 @@
-Limiting Resources
-------------------
+This is the source code for the accompanying site & evaluation service for
+the project [loopgotowhile][]. A live instance can be found [here][instance].
 
-Also the computation will time out if it takes longer than five seconds.
+  [loopgotowhile]: https://github.com/eugenkiss/loopgotowhile
+  [instance]: http://loopgotowhile.eugenkiss.com/
 
-These options make the executable static and limit the heap size to 5m.
+The evaluation service uses [Happstack][]. The editor functionality is provided
+by [CodeMirror][]. The design of the site is inspired by [Homebrew][].
 
-TODO: Put this in cabal
+  [happstack]: http://happstack.com/
+  [codemirror]: http://codemirror.net/
+  [homebrew]: http://mxcl.github.com/homebrew/
 
-ghc -O2 --make -static -optc-static -optl-static LGWServer.hs -fvia-C -optl-pthread +RTS -M5m
 
+How are the resources limited for the evaluation service?
+---------------------------------------------------------
 
-To limit the cpu resources you can use the program `cpulimit`
+By using the `timeout` function computations that take longer than five seconds
+are discarded. Mainly, this is needed to prevent infinite loops from keeping
+the server busy forever.
 
-For further information look [here](http://maketecheasier.com/limit-cpu-usage-of-any-process-in-linux/2010/09/22).
+The heap size for the created executable is limited as well so that the server's
+memory will not be filled up completely.
+
+To limit the CPU resources this evaluation service may take you can use the 
+program `cpulimit` on linux. For further information look 
+[here](http://maketecheasier.com/limit-cpu-usage-of-any-process-in-linux/2010/09/22).
+
+  [cpulimit]: http://cpulimit.sourceforge.net/
 
 
 Other
 -----
 
-codemirror.net is used for the editor functionality.
+If you get an error like `mkTextEncoding: invalid argument` from the
+statically-linked binaries, try setting the `GCONV_PATH` environment variable
+to point to the location of the codecs from the libc package, e.g. put `export
+GCONV_PATH=/usr/lib/gconv` at the top of your `.bashrc` on the remote. See also
+<http://blog.malde.org/index.php/2010/05/22/snagged/>.
 
-design inspired by homebrew
-
-If you get an error like mkTextEncoding: invalid argument from the statically-linked binaries, try setting the GCONV_PATH environment variable to point to the location of the codecs from the libc package, e.g. /usr/lib/gconv; see http://blog.malde.org/index.php/2010/05/22/snagged/
-
-put `export GCONV_PATH=/usr/lib/gconv` at the top of your bashrc on the remote.
-
-
-Very flaky to get both processes LGWServer and cpulimit running with fabric. Only
-works every fourth time or so.
+For some reason it is very flaky to get both processes LGWServer and cpulimit 
+running on the remote with fabric. It only works every fourth time or so.
 
 
-Asshole ghc: http://hackage.haskell.org/trac/ghc/ticket/698
+Suggestions for Future Improvements
+-----------------------------------
+
+### Evaluation Service
+
+- I dont' like the current way of limiting computations with an MVar. There is 
+  one global MVar, but I would like to have like 4 global MVars and only if all 
+  are not empty disallow further compuations. Or I'd like to have an MVar that 
+  is local to a process (or is it by default?), so that when I have 2 processes 
+  2 concurrent compuations can occure but not more.
+- Maybe change to Yesod? The memory usage of the evaluation service is too
+  high imho. With Yesod, it seems, I could even go without nginx as Warp seems
+  to be good enough to serve static content.
+
+
+### Editor
+
+- Implement loop, loop-strict, while, while-strict, goto, goto-strict
+  CodeMirror modes so that there is syntax highlighting and smart indentation.
+    - Change `enterMode` from `"keep"` to `"indent"` and `tabMode` from 
+      `"shift"` to `"indent"`
+- Switch modes when selecting another input language or checking strict.
