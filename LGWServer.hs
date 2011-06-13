@@ -108,14 +108,17 @@ runCode mvar runner = do
          Left s     -> badRequest $ toResponse s
          Right args -> do
            result <- liftIO $! timeout (1000 * timeLimit) $! do
-               let s = either id show $ runner source args
-               print s -- WTF!!! do I need this line so that *** timeout works!?!?!
+               let s  = runner source args
+                   s' = either id show $ s
+               -- WTF!!! Why do I need this line so that timeout works!?!?!
+               print s' 
                return s
            temp <- liftIO $! takeMVar mvar
            liftIO $! print temp
            case result of
-             Nothing -> badRequest $ toResponse "Computation took too long!"
-             Just x  -> ok $ toResponse x
+             Nothing        -> badRequest $ toResponse "Computation took too long!"
+             Just (Left x)  -> badRequest $ toResponse x
+             Just (Right x) -> ok         $ toResponse x
     else badRequest $ toResponse "Server is busy!"
 
 transformCode :: MVar () -> (String -> Either String String) -> ServerPart Response
@@ -127,14 +130,17 @@ transformCode mvar runner = do
        decodeBody myPolicy
        source <- look "source"
        result <- liftIO $! timeout (1000 * timeLimit) $! do
-           let s = either id id $ runner source
-           print s -- WTF!!! do I need this line so that *** timeout works!?!?! 
+           let s  = runner source
+               s' = either id show $ s
+           -- WTF!!! Why do I need this line so that timeout works!?!?!
+           print s' 
            return s
        temp <- liftIO $! takeMVar mvar
        liftIO $! print temp
        case result of
-         Nothing -> badRequest $ toResponse "Computation took too long!"
-         Just x  -> ok $ toResponse x
+         Nothing        -> badRequest $ toResponse "Computation took too long!"
+         Just (Left x)  -> badRequest $ toResponse x
+         Just (Right x) -> ok         $ toResponse x
     else badRequest $ toResponse "Server is busy!"
 
 parseArgs :: String -> Either String [Integer]

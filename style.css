@@ -308,6 +308,14 @@ footer {
     padding: 0.5em;
 }
 
+pre {
+    padding: 0.5em;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0.4em;
+    -moz-border-radius: 0.4em;
+    -webkit-border-radius: 0.4em;
+}
+
 textarea#source-code, textarea#output {
     width: 100%;
     margin: 0.5em 0;
@@ -363,3 +371,7 @@ input#source-args {
     background: rgba(0,0,0,0.3);  
    -webkit-border-radius: 5px;  
 }  
+
+.red {
+    color: rgb(255,60,60) !important;
+}

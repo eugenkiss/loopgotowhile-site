@@ -220,6 +220,8 @@ it is or not.
     });
 
     /****** Ajax ******/ 
+    var output = $("#output");
+    
     $("#run").click(function(){
       myCodeMirror.save();
       var sourceCode = $("#source-code").val();
@@ -237,10 +239,16 @@ it is or not.
         url: url,
         data: { source: sourceCode, args: args },
         success: function(data) {
-          $("#output").val(data);
+          output.val(data);
+          if(output.hasClass("red")) {
+            output.removeClass("red");
+          }
         },
         error: function(xhr) {
-          $("#output").val("Error: " + xhr.responseText);
+          output.val("Error: " + xhr.responseText);
+          if(!output.hasClass("red")) {
+            output.addClass("red");
+          }
         }
       });
       return false;
@@ -258,10 +266,16 @@ it is or not.
         url: url,
         data: { source: sourceCode },
         success: function(data) {
-          $("#output").val(data);
+          output.val(data);
+          if(output.hasClass("red")) {
+            output.removeClass("red");
+          }
         },
         error: function(xhr) {
-          $("#output").val("Error: " + xhr.responseText);
+          output.val("Error: " + xhr.responseText);
+          if(!output.hasClass("red")) {
+            output.addClass("red");
+          }
         }
       });
       return false;
