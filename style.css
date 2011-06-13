@@ -309,11 +309,17 @@ footer {
 }
 
 pre {
+    margin: 0.5em 2em;
     padding: 0.5em;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 0.4em;
     -moz-border-radius: 0.4em;
     -webkit-border-radius: 0.4em;
+}
+
+pre, code {
+    font-family: VT323, Monaco, monospace;
+    font-size: 1.25em;
 }
 
 textarea#source-code, textarea#output {

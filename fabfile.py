@@ -24,18 +24,25 @@ def compile():
 def copy():
     # make sure the directory is there!
     local('mkdir -p ' + DEPLOY_PATH)
+    # remove old contents
+    local('rm -r ' + DEPLOY_PATH + '/*')
     local('cp ' + os.path.join(ROOT_PATH, 'index.html') + ' ' +
                   os.path.join(DEPLOY_PATH, 'index.html'))
     local('cp ' + os.path.join(ROOT_PATH, 'style.css') + ' ' +
                   os.path.join(DEPLOY_PATH, 'style.css'))
     local('cp ' + os.path.join(ROOT_PATH, 'dist/build/LGWServer/LGWServer') + ' ' +
                   os.path.join(DEPLOY_PATH, 'LGWServer'))
+    local('cp -r ' + os.path.join(ROOT_PATH, 'codemirror') + ' ' +
+                  os.path.join(DEPLOY_PATH, 'codemirror'))
 
 def test():
     with settings(warn_only=True):
         local('killall -9 -v LGWServer ')
     compile()
+    # make sure the directory is there!
     local('mkdir -p ' + TEST_PATH)
+    # remove old contents
+    local('rm -r ' + TEST_PATH + '/*')
     local('cp ' + os.path.join(ROOT_PATH, 'index.html') + ' ' +
                   os.path.join(TEST_PATH, 'index.html'))
     local('cp ' + os.path.join(ROOT_PATH, 'style.css') + ' ' +
@@ -44,6 +51,15 @@ def test():
                   os.path.join(TEST_PATH, 'LGWServer'))
     local(os.path.join(TEST_PATH, 'LGWServer'))
 
+@hosts(PROD)
+def update_static_files():
+    copy()
+    project.rsync_project(
+        remote_dir=DEST_PATH,
+        local_dir=DEPLOY_PATH.rstrip('/') + '/',
+        delete=True
+    )
+    update_nginx_conf()
 
 @hosts(PROD)
 def publish():
@@ -67,5 +83,7 @@ def publish():
     update_nginx_conf()
     # Limit cpu usage (cpulimit must be installed on remote)
     run('nohup cpulimit -e LGWServer -l 20 >& /dev/null < /dev/null &')
+    run('sleep 1s')
     # Run LGWServer in background and limit heap size
-    run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS M30m -RTS >& /dev/null < /dev/null &')
+    run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -M30m -RTS >& /dev/null < /dev/null &')
+    run('sleep 1s')

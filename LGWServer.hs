@@ -77,17 +77,18 @@ handlers mvar = msum
     , anyPath $ dir "to" $ anyPath $ 
           badRequest $ toResponse "Impossible transformation!"
 
-    , nullDir >> serveFile (asContentType "text/html") "index.html"
-    , dir "style.css" $ serveFile (asContentType "text/css") "style.css"
-    , dirs "codemirror/codemirror.css" $ serveFile (asContentType "text/css") "codemirror/codemirror.css"
-    , dirs "codemirror/theme.css" $ serveFile (asContentType "text/css") "codemirror/theme.css"
-    , dirs "codemirror/codemirror.js" $ serveFile (asContentType "text/javascript") "codemirror/codemirror.js"
-    , dirs "codemirror/loop.js" $ serveFile (asContentType "text/javascript") "codemirror/loop.js"
-    , dirs "codemirror/loop-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/loop-strict.js"
-    , dirs "codemirror/goto.js" $ serveFile (asContentType "text/javascript") "codemirror/goto.js"
-    , dirs "codemirror/goto-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/goto-strict.js"
-    , dirs "codemirror/while.js" $ serveFile (asContentType "text/javascript") "codemirror/while.js"
-    , dirs "codemirror/while-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/while-strict.js"
+    -- Comment this section when not testing
+    {-, nullDir >> serveFile (asContentType "text/html") "index.html"-}
+    {-, dir "style.css" $ serveFile (asContentType "text/css") "style.css"-}
+    {-, dirs "codemirror/codemirror.css" $ serveFile (asContentType "text/css") "codemirror/codemirror.css"-}
+    {-, dirs "codemirror/theme.css" $ serveFile (asContentType "text/css") "codemirror/theme.css"-}
+    {-, dirs "codemirror/codemirror.js" $ serveFile (asContentType "text/javascript") "codemirror/codemirror.js"-}
+    {-, dirs "codemirror/loop.js" $ serveFile (asContentType "text/javascript") "codemirror/loop.js"-}
+    {-, dirs "codemirror/loop-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/loop-strict.js"-}
+    {-, dirs "codemirror/goto.js" $ serveFile (asContentType "text/javascript") "codemirror/goto.js"-}
+    {-, dirs "codemirror/goto-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/goto-strict.js"-}
+    {-, dirs "codemirror/while.js" $ serveFile (asContentType "text/javascript") "codemirror/while.js"-}
+    {-, dirs "codemirror/while-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/while-strict.js"-}
 
     , badRequest $ toResponse "Nothing here!"
     ]
@@ -97,10 +98,10 @@ myPolicy = (defaultBodyPolicy "/tmp/" 0 100000 1000)
 
 runCode :: MVar () -> (String -> [Integer] -> Either String Integer) -> ServerPart Response
 runCode mvar runner = do 
+    methodM POST
     wasFree <- liftIO $! tryPutMVar mvar ()
     liftIO $! print wasFree
     if wasFree then do
-       methodM POST
        decodeBody myPolicy
        source    <- look "source"
        arguments <- look "args"
@@ -109,9 +110,8 @@ runCode mvar runner = do
          Right args -> do
            result <- liftIO $! timeout (1000 * timeLimit) $! do
                let s  = runner source args
-                   s' = either id show $ s
                -- WTF!!! Why do I need this line so that timeout works!?!?!
-               print s' 
+               print s 
                return s
            temp <- liftIO $! takeMVar mvar
            liftIO $! print temp
@@ -123,17 +123,16 @@ runCode mvar runner = do
 
 transformCode :: MVar () -> (String -> Either String String) -> ServerPart Response
 transformCode mvar runner = do 
+    methodM POST
     wasFree <- liftIO $! tryPutMVar mvar ()
     liftIO $! print wasFree
     if wasFree then do
-       methodM POST
        decodeBody myPolicy
        source <- look "source"
        result <- liftIO $! timeout (1000 * timeLimit) $! do
            let s  = runner source
-               s' = either id show $ s
            -- WTF!!! Why do I need this line so that timeout works!?!?!
-           print s' 
+           print s 
            return s
        temp <- liftIO $! takeMVar mvar
        liftIO $! print temp

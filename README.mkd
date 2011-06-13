@@ -1,12 +1,10 @@
 This is the source code for the accompanying site & evaluation service for
 the project [loopgotowhile][]. A live instance can be found [here][instance].
-
-  [loopgotowhile]: https://github.com/eugenkiss/loopgotowhile
-  [instance]: http://loopgotowhile.eugenkiss.com/
-
 The evaluation service uses [Happstack][]. The editor functionality is provided
 by [CodeMirror][]. The design of the site is inspired by [Homebrew][].
 
+  [loopgotowhile]: https://github.com/eugenkiss/loopgotowhile
+  [instance]: http://loopgotowhile.eugenkiss.com/
   [happstack]: http://happstack.com/
   [codemirror]: http://codemirror.net/
   [homebrew]: http://mxcl.github.com/homebrew/
