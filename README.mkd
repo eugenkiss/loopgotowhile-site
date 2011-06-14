@@ -17,21 +17,21 @@ By using the `timeout` function computations that take longer than five seconds
 are discarded. Mainly, this is needed to prevent infinite loops from keeping
 the server busy forever.
 
-The heap size for the created executable is limited as well so that the server's
-memory will not be filled up completely.
+The heap size for the created executable is limited as well so that the
+server's memory will not be filled up completely.
 
-To limit the CPU resources this evaluation service may take you can use the 
-program `cpulimit` on linux. For further information look 
+To limit the CPU resources for this evaluation service you can use the program
+[cpulimit][] on linux. For further information look
 [here](http://maketecheasier.com/limit-cpu-usage-of-any-process-in-linux/2010/09/22).
 
   [cpulimit]: http://cpulimit.sourceforge.net/
 
 
-Other
------
+What else is there to mention?
+------------------------------
 
 If you get an error like `mkTextEncoding: invalid argument` from the
-statically-linked binaries, try setting the `GCONV_PATH` environment variable
+statically-linked binary, try setting the `GCONV_PATH` environment variable
 to point to the location of the codecs from the libc package, e.g. put `export
 GCONV_PATH=/usr/lib/gconv` at the top of your `.bashrc` on the remote. See also
 <http://blog.malde.org/index.php/2010/05/22/snagged/>.
@@ -40,8 +40,8 @@ For some reason it is very flaky to get both processes LGWServer and cpulimit
 running on the remote with fabric. It only works every fourth time or so.
 
 
-Suggestions for Future Improvements
------------------------------------
+What are some suggestions for future improvements?
+--------------------------------------------------
 
 ### Evaluation Service
 
@@ -61,4 +61,14 @@ Suggestions for Future Improvements
   CodeMirror modes so that there is syntax highlighting and smart indentation.
     - Change `enterMode` from `"keep"` to `"indent"` and `tabMode` from 
       `"shift"` to `"indent"`
-- Switch modes when selecting another input language or checking strict.
+    - Switch modes when selecting another input language or checking strict.
+
+
+### Usability
+
+- When clicking the "run" or "transform" button both of them should be disabled
+  until the server responded. Better yet, the clicked button should drop down
+  a bit into the background and be released again after a response (like a real
+  button)
+- The selects and the checkbox should be styled so that they fit the theme
+  instead of relying on the standard browser styling.
