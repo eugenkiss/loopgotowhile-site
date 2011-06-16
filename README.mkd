@@ -39,6 +39,10 @@ GCONV_PATH=/usr/lib/gconv` at the top of your `.bashrc` on the remote. See also
 For some reason it is very flaky to get both processes LGWServer and cpulimit 
 running on the remote with fabric. It only works every fourth time or so.
 
+If there would be an easy way to spit out Javascript from Haskell code I'd
+rather do that and have the interpreters run on the client side instead of
+running a program on the server.
+
 
 What are some suggestions for future improvements?
 --------------------------------------------------

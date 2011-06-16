@@ -75,19 +75,44 @@
       <div style="clear:both;height:20px"></div>
 
       Output:<br>
-      <textarea name="source" id="output" rows="10"></textarea>
+      <textarea name="source" id="output" rows="10" readonly="readonly"></textarea>
 
 <!-- Content -->
 <h1 id="about">About</h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultrices
-posuere quam id aliquet. Sed sollicitudin nulla fermentum felis pretium
-malesuada. Fusce quis elit luctus urna fermentum consequat. Fusce porttitor
-felis eu nulla accumsan ut luctus arcu convallis. Phasellus aliquet, dolor et
-ornare condimentum, quam sem tempus nibh, porta pellentesque ante ante ac
-purus. Vestibulum consequat volutpat nisl at interdum. Ut ac orci mauris,
-tincidunt aliquet lorem. Nullam lacus massa, ultricies in dapibus eu, lacinia
-a tellus. Proin cursus ligula vitae nunc bibendum luctus. Curabitur et nunc id
-lectus rutrum iaculis.</p>
+
+<p>This site contains an evaluation service, exercises and the specifications
+for the programming languages <i>Loop, Goto & While</i>. You never heard of 
+them, you say? No problem, that's what this about section was made for.</p>
+
+<p>The languages are taken from 
+<a href="http://www.thi.uni-hannover.de/en/homepage/people/heribert-vollmer/">Prof Dr. Heribert Vollmer</a>'s
+lecture notes for his introductory course in theoretical computer science. They
+are modeled to feel similar to common imperative programming languages but they 
+are delibaretly greatly simplified. Their purpose was to provide formal 
+semantics for the specification of algorithms. Moreover, they were used to show
+the equivalence of turing complete languages.</p> 
+
+<p>There was no executable implementation of these languages to my knowledge. 
+Frankly, why should there have been? Their purpose didn't require that. However,
+<a href="http://eugenkiss.com/about/">I</a> thought it would be an interesting 
+exercise to create exectuable implementations for these languages. Even more so 
+as I always wanted to create an executable implementation of a programming 
+language and it was the perfect opportunity to get to know Haskell better
+(as the parsers/transformer/evaluators and the web evaluation service are 
+written in Haskell). Have a look at the
+<a href="https://github.com/eugenkiss/loopgotowhile">source code of this site</a>, the 
+<a href="https://github.com/eugenkiss/loopgotowhile-site">source code of the interpreters</a> or the
+<a href="http://eugenkiss.com/blog/2011/loop-goto-and-while/">blog post about this project</a>
+if you are interested.<p>
+
+<p>But what can you do on this site as an, perhaps, accidental visitor if you 
+never took said introductory course? You can, as a brain exercise, do some of
+the exercises I provided at the bottom of this site!</p> 
+
+<p>By the way, you can provide a comma separated list of arguments to your
+program. For example, an argument list <code>1,4,100</code> is equivalent to
+prepending <code>x1 := 1; x2 := 4; x3 := 100</code> at the top of your
+source file.<p>
 
 
 <h1 id="specifications">Specifications</h1>
@@ -135,7 +160,10 @@ invincibility! To solve this quest you must simply solve each exercise to the
 best of your knowledge. All answers to this questions can be found out by
 either thinking, executing/transforming code with the evaluation service or by
 looking at <a href="https://github.com/eugenkiss/loopgotowhile">the source code
-of interpreters</a>.<p>
+of the interpreters</a>. You are allowed to use the knowledge from previous
+exercises, e.g. if you showed how an <code>IF</code> can be transformed into
+strict Loop program you can use this knowledge throughout the following 
+exercises unless it is explicitly forbidden in an exercise.<p>
 
 <p>Various sources for the exercises have been used. Some of exercises were my
 idea whereas others were taken from the exercises of Prof Dr. Heribert

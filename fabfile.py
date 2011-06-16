@@ -82,7 +82,7 @@ def publish():
     )
     update_nginx_conf()
     # Limit cpu usage (cpulimit must be installed on remote)
-    run('nohup cpulimit -e LGWServer -l 20 >& /dev/null < /dev/null &')
+    run('nohup cpulimit -e LGWServer -l 40 >& /dev/null < /dev/null &')
     run('sleep 1s')
     # Run LGWServer in background and limit heap size
     run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -M30m -RTS >& /dev/null < /dev/null &')
