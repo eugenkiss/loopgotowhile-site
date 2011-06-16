@@ -100,19 +100,24 @@ runCode :: MVar () -> (String -> [Integer] -> Either String Integer) -> ServerPa
 runCode mvar runner = do 
     methodM POST
     wasFree <- liftIO $! tryPutMVar mvar ()
-    liftIO $! print wasFree
+    liftIO $! print wasFree -- can be deleted probably
     if wasFree then do
        decodeBody myPolicy
        source    <- look "source"
        arguments <- look "args"
        case parseArgs arguments of
-         Left s     -> badRequest $ toResponse s
+         Left s     -> do
+           -- Don't know if this strictness is needed. Probably not.
+           temp <- liftIO $! takeMVar mvar
+           liftIO $! print temp
+           badRequest $ toResponse s
          Right args -> do
            result <- liftIO $! timeout (1000 * timeLimit) $! do
                let s  = runner source args
-               -- WTF!!! Why do I need this line so that timeout works!?!?!
+               -- TODO: Instead of printing force strictness in another way
                print s 
                return s
+           -- Don't know if this strictness is needed. Probably not.
            temp <- liftIO $! takeMVar mvar
            liftIO $! print temp
            case result of
@@ -131,7 +136,7 @@ transformCode mvar runner = do
        source <- look "source"
        result <- liftIO $! timeout (1000 * timeLimit) $! do
            let s  = runner source
-           -- WTF!!! Why do I need this line so that timeout works!?!?!
+           -- TODO: Instead of printing force strictness in another way
            print s 
            return s
        temp <- liftIO $! takeMVar mvar
