@@ -179,10 +179,23 @@ transforming an extended Goto program to the strict version?<p>
  
 <pre>
 - TODO: put this code with a special case here (see tests but simpler)
+Like:
+
+..: ..
+M2: If .. GOTO M4
+..: ..
+Mx: GOTO M5
+M4: ..
+M5: ..
+
+The problem is that M4 is on fifth position, so that in line 2 with label M2 M4 will be
+changed to M5. If it is not somehow marked, then on line 6 all M5's will be
+renamed, including the one on line M2 (if it has not been marked).
 </pre>
 
-<p>To test if your transformation was correct simply compare the output of the
-given code with the transformed code.<p>
+<p>To test if your transformation algorithm is correct simply compare the
+mechanical output of the transformation of the given code with your
+self-transformed code.<p>
 
 <li>
 - Focus on Loop, mix the order so that not 5 of a category in a row,

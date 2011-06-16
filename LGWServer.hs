@@ -1,9 +1,9 @@
 {-# LANGUAGE DoAndIfThenElse #-}
 import System.Timeout (timeout)
+import Control.Applicative (optional)
 import Control.Concurrent.MVar
 import Control.Monad.Trans (liftIO)
 import Control.Monad (msum)
-import Control.Applicative ((<$>), (<*>))
 import Data.Maybe (listToMaybe, fromMaybe)
 import Data.List.Split (splitOn)
 
@@ -15,7 +15,7 @@ import Happstack.Server
     , serveFile, asContentType 
     , nullConf, ok, simpleHTTP, toResponse, methodM, badRequest, look
     ) 
-import Happstack.Server.RqData (RqData)
+import Happstack.Server.RqData (checkRq)
 
 import qualified Language.LoopGotoWhile.Loop.Strict     as LoopS
 import qualified Language.LoopGotoWhile.Loop.Extended   as LoopE
@@ -99,48 +99,47 @@ myPolicy = (defaultBodyPolicy "/tmp/" 0 100000 1000)
 runCode :: MVar () -> (String -> [Integer] -> Either String Integer) -> ServerPart Response
 runCode mvar runner = do 
     methodM POST
-    wasFree <- liftIO $! tryPutMVar mvar ()
-    liftIO $! print wasFree -- can be deleted probably
+    wasFree <- liftIO $ tryPutMVar mvar ()
     if wasFree then do
+       -- TODO: Instead of failing with an error response like "Request body too
+       -- large" like suggested in the documentation, the source code from the
+       -- form submission will just be chopped off but still read. This leads to
+       -- a parser error message for the user which is highly misleading, since
+       -- the user does not realise that only a part of his entered source code is
+       -- decoded by the server.
        decodeBody myPolicy
-       source    <- look "source"
-       arguments <- look "args"
-       case parseArgs arguments of
-         Left s     -> do
-           -- Don't know if this strictness is needed. Probably not.
-           temp <- liftIO $! takeMVar mvar
-           liftIO $! print temp
-           badRequest $ toResponse s
-         Right args -> do
-           result <- liftIO $! timeout (1000 * timeLimit) $! do
-               let s  = runner source args
-               -- TODO: Instead of printing force strictness in another way
-               print s 
-               return s
-           -- Don't know if this strictness is needed. Probably not.
-           temp <- liftIO $! takeMVar mvar
-           liftIO $! print temp
-           case result of
-             Nothing        -> badRequest $ toResponse "Computation took too long!"
-             Just (Left x)  -> badRequest $ toResponse x
-             Just (Right x) -> ok         $ toResponse x
+       source <- look "source"
+       -- TODO: This is stupid. If there is an error when parsing the
+       -- arguments, instead of returning an error response like suggested in
+       -- the documentation args will simply become NOTHING. If I, however,
+       -- remove `optional` then this whole function behaves in very weird
+       -- ways, as if a silent exception happened...
+       args   <- optional $ look "args" `checkRq` parseArgs
+       result <- liftIO $ timeout (1000 * timeLimit) $ do
+           let s  = runner source $ fromMaybe [] args
+           -- TODO: Instead of printing force strictness in another way
+           print s 
+           return s
+       _ <- liftIO $ tryTakeMVar mvar
+       case result of
+         Nothing        -> badRequest $ toResponse "Computation took too long!"
+         Just (Left x)  -> badRequest $ toResponse x
+         Just (Right x) -> ok         $ toResponse x
     else badRequest $ toResponse "Server is busy!"
 
 transformCode :: MVar () -> (String -> Either String String) -> ServerPart Response
 transformCode mvar runner = do 
     methodM POST
-    wasFree <- liftIO $! tryPutMVar mvar ()
-    liftIO $! print wasFree
+    wasFree <- liftIO $ tryPutMVar mvar ()
     if wasFree then do
        decodeBody myPolicy
        source <- look "source"
-       result <- liftIO $! timeout (1000 * timeLimit) $! do
+       result <- liftIO $ timeout (1000 * timeLimit) $ do
            let s  = runner source
            -- TODO: Instead of printing force strictness in another way
            print s 
            return s
-       temp <- liftIO $! takeMVar mvar
-       liftIO $! print temp
+       _ <- liftIO $ tryTakeMVar mvar
        case result of
          Nothing        -> badRequest $ toResponse "Computation took too long!"
          Just (Left x)  -> badRequest $ toResponse x
@@ -149,7 +148,7 @@ transformCode mvar runner = do
 
 parseArgs :: String -> Either String [Integer]
 parseArgs "" = Right []
-parseArgs s  = if any (== Nothing) result 
+parseArgs s  = if any (== Nothing) result
                   then Left "Parse Error on Arguments!"
                   else Right $ map (fromMaybe 0) result
   where result = map maybeRead . splitOn "," . trimWhiteSpace $ s
