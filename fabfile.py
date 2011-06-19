@@ -17,39 +17,34 @@ def update_nginx_conf():
 def backup():
     local('git push -f ~/Dropbox/backup/loopgotowhile-site.git')
 
-def compile():
-    local('cabal configure')
+def compile(profiling):
+    if profiling:
+        local('cabal configure --enable-executable-profiling --enable-library-profiling --ghc-option=-auto-all')
+    else:
+        local('cabal configure --disable-executable-profiling --disable-library-profiling')
     local('cabal build')
 
-def copy():
+def copy(path):
     # make sure the directory is there!
-    local('mkdir -p ' + DEPLOY_PATH)
+    local('mkdir -p ' + path)
     # remove old contents
-    local('rm -r ' + DEPLOY_PATH + '/*')
+    local('rm -r ' + path + '/*')
     local('cp ' + os.path.join(ROOT_PATH, 'index.html') + ' ' +
-                  os.path.join(DEPLOY_PATH, 'index.html'))
+                  os.path.join(path, 'index.html'))
     local('cp ' + os.path.join(ROOT_PATH, 'style.css') + ' ' +
-                  os.path.join(DEPLOY_PATH, 'style.css'))
+                  os.path.join(path, 'style.css'))
     local('cp ' + os.path.join(ROOT_PATH, 'dist/build/LGWServer/LGWServer') + ' ' +
-                  os.path.join(DEPLOY_PATH, 'LGWServer'))
+                  os.path.join(path, 'LGWServer'))
     local('cp -r ' + os.path.join(ROOT_PATH, 'codemirror') + ' ' +
-                  os.path.join(DEPLOY_PATH, 'codemirror'))
+                  os.path.join(path, 'codemirror'))
 
 def test():
-    with settings(warn_only=True):
-        local('killall -9 -v LGWServer ')
-    compile()
+    """Test the server locally"""
+    compile(True)
     # make sure the directory is there!
     local('mkdir -p ' + TEST_PATH)
-    # remove old contents
-    local('rm -r ' + TEST_PATH + '/*')
-    local('cp ' + os.path.join(ROOT_PATH, 'index.html') + ' ' +
-                  os.path.join(TEST_PATH, 'index.html'))
-    local('cp ' + os.path.join(ROOT_PATH, 'style.css') + ' ' +
-                  os.path.join(TEST_PATH, 'style.css'))
-    local('cp ' + os.path.join(ROOT_PATH, 'dist/build/LGWServer/LGWServer') + ' ' +
-                  os.path.join(TEST_PATH, 'LGWServer'))
-    local(os.path.join(TEST_PATH, 'LGWServer'))
+    copy(TEST_PATH)
+    local(os.path.join(TEST_PATH, 'LGWServer test'))
 
 @hosts(PROD)
 def update_static_files():
@@ -73,8 +68,8 @@ def publish():
         run('killall -9 -v LGWServer ')
         run('killall -9 -v cpulimit ')
     backup()
-    compile()
-    copy()
+    compile(False)
+    copy(DEPLOY_PATH)
     project.rsync_project(
         remote_dir=DEST_PATH,
         local_dir=DEPLOY_PATH.rstrip('/') + '/',

@@ -1,4 +1,5 @@
 {-# LANGUAGE DoAndIfThenElse #-}
+import System.Environment (getArgs)
 import System.Timeout (timeout)
 import Control.Applicative (optional)
 import Control.Concurrent.MVar
@@ -30,8 +31,11 @@ import qualified Language.LoopGotoWhile.While.Transform as WhileT
 
 main :: IO ()
 main = do
+    args <- getArgs
     mvar <- newEmptyMVar
-    simpleHTTP myConf $ handlers mvar
+    simpleHTTP myConf $ msum $ [ lgwHandlers mvar ] 
+                            ++ if "test" `elem` args then [testHandlers] else []
+                            ++ [ notFoundHandler ]
 
 -- The time limit for computations in ms.
 timeLimit :: Int
@@ -45,8 +49,8 @@ myConf = H.Conf
     , H.timeout   = 10
     }
 
-handlers :: MVar () -> ServerPart Response
-handlers mvar = msum
+lgwHandlers :: MVar () -> ServerPart Response
+lgwHandlers mvar = msum
     [ dirs "loop/strict"    $ runCode mvar LoopS.run
     , dirs "loop/extended"  $ runCode mvar LoopE.run
     , dirs "goto/strict"    $ runCode mvar GotoS.run
@@ -76,22 +80,25 @@ handlers mvar = msum
           WhileE.parse s >>= return . show . WhileT.toGoto
     , anyPath $ dir "to" $ anyPath $ 
           badRequest $ toResponse "Impossible transformation!"
-
-    -- Comment this section when not testing
-    {-, nullDir >> serveFile (asContentType "text/html") "index.html"-}
-    {-, dir "style.css" $ serveFile (asContentType "text/css") "style.css"-}
-    {-, dirs "codemirror/codemirror.css" $ serveFile (asContentType "text/css") "codemirror/codemirror.css"-}
-    {-, dirs "codemirror/theme.css" $ serveFile (asContentType "text/css") "codemirror/theme.css"-}
-    {-, dirs "codemirror/codemirror.js" $ serveFile (asContentType "text/javascript") "codemirror/codemirror.js"-}
-    {-, dirs "codemirror/loop.js" $ serveFile (asContentType "text/javascript") "codemirror/loop.js"-}
-    {-, dirs "codemirror/loop-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/loop-strict.js"-}
-    {-, dirs "codemirror/goto.js" $ serveFile (asContentType "text/javascript") "codemirror/goto.js"-}
-    {-, dirs "codemirror/goto-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/goto-strict.js"-}
-    {-, dirs "codemirror/while.js" $ serveFile (asContentType "text/javascript") "codemirror/while.js"-}
-    {-, dirs "codemirror/while-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/while-strict.js"-}
-
-    , badRequest $ toResponse "Nothing here!"
     ]
+
+testHandlers :: ServerPart Response
+testHandlers = msum
+    [ nullDir >> serveFile (asContentType "text/html") "index.html"
+    , dir "style.css" $ serveFile (asContentType "text/css") "style.css"
+    , dirs "codemirror/codemirror.css" $ serveFile (asContentType "text/css") "codemirror/codemirror.css"
+    , dirs "codemirror/theme.css" $ serveFile (asContentType "text/css") "codemirror/theme.css"
+    , dirs "codemirror/codemirror.js" $ serveFile (asContentType "text/javascript") "codemirror/codemirror.js"
+    , dirs "codemirror/loop.js" $ serveFile (asContentType "text/javascript") "codemirror/loop.js"
+    , dirs "codemirror/loop-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/loop-strict.js"
+    , dirs "codemirror/goto.js" $ serveFile (asContentType "text/javascript") "codemirror/goto.js"
+    , dirs "codemirror/goto-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/goto-strict.js"
+    , dirs "codemirror/while.js" $ serveFile (asContentType "text/javascript") "codemirror/while.js"
+    , dirs "codemirror/while-strict.js" $ serveFile (asContentType "text/javascript") "codemirror/while-strict.js"
+    ]
+
+notFoundHandler :: ServerPart Response
+notFoundHandler = badRequest $ toResponse "Nothing here!"
 
 myPolicy :: BodyPolicy
 myPolicy = (defaultBodyPolicy "/tmp/" 0 100000 1000)

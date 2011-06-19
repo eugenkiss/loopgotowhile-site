@@ -1,5 +1,4 @@
 - Look at the bottom of http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Concurrent.html
   This is exactly what I need to make sure, that the MVar is written to!
-- it is not quite true that the domain is the natural number but rather NxNx..xN (because of args)
 - finish content
 - implement suggestions
