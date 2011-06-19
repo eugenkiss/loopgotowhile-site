@@ -44,7 +44,8 @@ def test():
     # make sure the directory is there!
     local('mkdir -p ' + TEST_PATH)
     copy(TEST_PATH)
-    local(os.path.join(TEST_PATH, 'LGWServer test'))
+    with lcd(TEST_PATH): 
+        local('LGWServer test +RTS -hd -p')
 
 @hosts(PROD)
 def update_static_files():

@@ -24,6 +24,7 @@ Executable LGWServer
         base >= 4.0,
         haskell98,
         mtl,
+        deepseq,
         split,
         happstack-server,
         loopgotowhile

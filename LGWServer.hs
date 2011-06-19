@@ -1,6 +1,7 @@
 {-# LANGUAGE DoAndIfThenElse #-}
 import System.Environment (getArgs)
 import System.Timeout (timeout)
+import Control.DeepSeq (deepseq)
 import Control.Applicative (optional)
 import Control.Concurrent.MVar
 import Control.Monad.Trans (liftIO)
@@ -46,7 +47,7 @@ myConf = H.Conf
     { H.port      = 8000
     , H.validator = Nothing
     , H.logAccess = H.logAccess nullConf
-    , H.timeout   = 10
+    , H.timeout   = 20
     }
 
 lgwHandlers :: MVar () -> ServerPart Response
@@ -108,12 +109,14 @@ runCode mvar runner = do
     methodM POST
     wasFree <- liftIO $ tryPutMVar mvar ()
     if wasFree then do
-       -- TODO: Instead of failing with an error response like "Request body too
-       -- large" like suggested in the documentation, the source code from the
-       -- form submission will just be chopped off but still read. This leads to
-       -- a parser error message for the user which is highly misleading, since
-       -- the user does not realise that only a part of his entered source code is
-       -- decoded by the server.
+       -- TODO: Instead of failing with an error response like "Request body
+       -- too large" like suggested in the documentation, the source code from
+       -- the form submission will just be chopped off but still read. This
+       -- leads to a parser error message for the user which is highly
+       -- misleading, since the user does not realise that only a part of his
+       -- entered source code is decoded by the server.
+       -- But if the request body is far too large the server responds with an
+       -- error but without an error message at all, which is weird, too...
        decodeBody myPolicy
        source <- look "source"
        -- TODO: This is stupid. If there is an error when parsing the
@@ -122,11 +125,9 @@ runCode mvar runner = do
        -- remove `optional` then this whole function behaves in very weird
        -- ways, as if a silent exception happened...
        args   <- optional $ look "args" `checkRq` parseArgs
-       result <- liftIO $ timeout (1000 * timeLimit) $ do
-           let s  = runner source $ fromMaybe [] args
-           -- TODO: Instead of printing force strictness in another way
-           print s 
-           return s
+       result <- liftIO $ timeout (1000 * timeLimit) $ 
+                          do let s = runner source $ fromMaybe [] args
+                             s `deepseq` return s
        _ <- liftIO $ tryTakeMVar mvar
        case result of
          Nothing        -> badRequest $ toResponse "Computation took too long!"
@@ -141,11 +142,9 @@ transformCode mvar runner = do
     if wasFree then do
        decodeBody myPolicy
        source <- look "source"
-       result <- liftIO $ timeout (1000 * timeLimit) $ do
-           let s  = runner source
-           -- TODO: Instead of printing force strictness in another way
-           print s 
-           return s
+       result <- liftIO $ timeout (1000 * timeLimit) $ 
+                          do let s = runner source
+                             s `deepseq` return s
        _ <- liftIO $ tryTakeMVar mvar
        case result of
          Nothing        -> badRequest $ toResponse "Computation took too long!"
@@ -156,7 +155,7 @@ transformCode mvar runner = do
 parseArgs :: String -> Either String [Integer]
 parseArgs "" = Right []
 parseArgs s  = if any (== Nothing) result
-                  then Left "Parse Error on Arguments!"
+                  then Left "Parse error on arguments!"
                   else Right $ map (fromMaybe 0) result
   where result = map maybeRead . splitOn "," . trimWhiteSpace $ s
         trimWhiteSpace = filter (/= ' ')
