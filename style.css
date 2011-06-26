@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold);
+@import url(http://fonts.googleapis.com/css?family=Coda+Caption:800&v1);
 @import url(http://fonts.googleapis.com/css?family=VT323);
 
 /*---------------------------------------------------------------------------*/
@@ -164,10 +165,12 @@ a:link { -webkit-tap-highlight-color: #FF5E99; } /* j.mp/webkit-tap-highlight-co
 html {
     min-width: 850px;
     background: #27221A;
+    -webkit-font-smoothing: antialiased;
 }
 
 body {
-    font-family: Droid Sans, Arial, sans-serif;
+    font-family: "Droid Sans", Helvetica, Arial, sans-serif;
+    font-size: 15px;
     margin-right: 200px;
     margin-left: 1em;
     color: #F6E6CC;
@@ -177,8 +180,16 @@ p {
     margin: 0.5em 0;
 }
 
+blockquote {
+    margin: 1em 2em;
+}
+
+i, em {
+    margin-right: 0.2em;
+}
+
 hr {
-    margin: 0.3em 0;
+    margin: 0.3em -1em;
     padding: 0;
     height: 0px;
     border: none;
@@ -187,7 +198,8 @@ hr {
 }
 
 select {
-    font-family: Droid Sans, Arial, sans-serif;
+    font-family: "Coda Caption";
+    font-size: 12px;
 }
 
 input[type="checkbox"] {
@@ -195,7 +207,8 @@ input[type="checkbox"] {
 }
 
 button, input {
-    font-family: Droid Sans, Arial, sans-serif;
+    font-family: "Coda Caption";
+    font-size: 12px;
     outline: none;
     color: #BA832C;
     padding: 0.2em 0.6em;
@@ -212,10 +225,12 @@ button, input {
 }
 
 header, h1, h2, h3, h4 {
-    margin: 0.5em 0;
-    padding: 0.5em 0;
+    font-family: "Coda Caption";
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding-top: 0.5em;
     font-weight: bold;
-    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.25);
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.35);
     color: #D7AF72;
 }
 
@@ -262,10 +277,12 @@ nav ul:first-child {
 }
 
 nav#sidebar {
+    font-family: "Coda Caption";
+    font-size: 12px;
     position: fixed;
     padding: 1em;
-    margin-left: 53em;
-    line-height: 1.7em;
+    margin-left: 59em;
+    line-height: 2em;
     font-weight: bold;
     background: rgba(162, 107, 20, 0.3);
     border-radius: 0.4em;
@@ -283,15 +300,15 @@ nav a, nav a:active, nav a:visited {
 
 #container {
     margin: 0 auto;
-    width: 600px;
+    width: 650px;
     position: relative;
 }
 
 header {
     text-align: center;
-    font-size: 4em;
+    font-size: 3em;
     margin-top: 0.2em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0em;
     padding-bottom: 0.2em;
 }
 
@@ -308,18 +325,34 @@ footer {
     padding: 0.5em;
 }
 
+pre, code {
+    font-family: VT323, Monaco, monospace;
+    font-size: 1.25em;
+}
+
 pre {
     margin: 0.5em 2em;
     padding: 0.5em;
-    background: rgba(0, 0, 0, 0.3);
     border-radius: 0.4em;
     -moz-border-radius: 0.4em;
     -webkit-border-radius: 0.4em;
 }
 
-pre, code {
-    font-family: VT323, Monaco, monospace;
-    font-size: 1.25em;
+code {
+    padding: 0 0.15em 0.05em;
+    border-radius: 0.2em;
+    -moz-border-radius: 0.2em;
+    -webkit-border-radius: 0.2em;
+}
+
+code, pre {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.CodeMirror code, .CodeMirror pre {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 textarea#source-code, textarea#output {
