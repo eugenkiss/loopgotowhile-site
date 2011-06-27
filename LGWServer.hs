@@ -87,6 +87,7 @@ testHandlers :: ServerPart Response
 testHandlers = msum
     [ nullDir >> serveFile (asContentType "text/html") "index.html"
     , dir "style.css" $ serveFile (asContentType "text/css") "style.css"
+    , dir "bg.jpg" $ serveFile (asContentType "image/jpeg") "bg.jpg"
     , dirs "codemirror/codemirror.css" $ serveFile (asContentType "text/css") "codemirror/codemirror.css"
     , dirs "codemirror/theme.css" $ serveFile (asContentType "text/css") "codemirror/theme.css"
     , dirs "codemirror/codemirror.js" $ serveFile (asContentType "text/javascript") "codemirror/codemirror.js"

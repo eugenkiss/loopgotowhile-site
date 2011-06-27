@@ -109,48 +109,339 @@ if you are interested.<p>
 never took said introductory course? You can, as a brain exercise, do some of
 the exercises I provided at the bottom of this site!</p> 
 
-<p>By the way, you can provide a comma separated list of arguments to your
-program. For example, an argument list <code>1,4,100</code> is equivalent to
-prepending <code>x1 := 1; x2 := 4; x3 := 100</code> at the top of your
-source file.<p>
-
 
 <h1 id="specifications">Specifications</h1>
+
 <p>These are the specifications for the programming languages <i>Loop, Goto
 & While</i> in strict and extended versions. The specifications of the strict
 versions are taken from Prof Dr. Heribert Vollmer's lecture notes for his
 introductory course in theoretical computer science. You need to know how to
 write programs which will be accepted by the evaluation service after all,
-don't you? Remember, with either language you can only compute functions whose
-domain and codomain are the natural numbers!</p>
+don't you?</p> 
+
+<p>Remember, with either language you can only implement functions
+whose codomain are the natural numbers and whose domain are the natural numbers
+to the power of <i>n</i>, where <i>n</i> is the number of arguments. Also,
+every variable is by default initialized to <code>0</code> and arguments, if
+any, are stored in <code>x1,...,xn</code>. That means, providing the argument
+list <code>4,87,3</code> is the same as prepending <code>x1 := 4; x2 := 87, x3
+:= 3</code> to the top of your program. Also, note that each language is
+case sensitive!</p>
 
 
 <h2 id="loop">Loop</h2>
 
+<p>An exemplary (extended and pointless) Loop program looks as follows:</p>
+
+<pre>
+x4 := abc + y * 4;
+IF hg != 7 || hg != 7 THEN 
+  LOOP x4 - (x4 + 1) DO
+    x0 := 1
+  END
+ELSE 
+  x0 := counter
+END
+</pre>
+
+
 <h3 id="loop-syntax">Syntax</h3>
+
+<p>
+The syntactical components are
+
+<ul>
+<li>Variables: <code>x0</code>,<code>x1</code>,<code>x2</code>,<code>x3</code>,<code>x4</code>,...
+<li>Constants: <code>0</code>,<code>1</code>,<code>2</code>,<code>3</code>,<code>4</code>,...
+<li>Operators: <code>+</code> and <code>-</code>
+<li>Separators: <code>;</code> and <code>:=</code>
+<li>Keywords: <code>LOOP</code>,<code>DO</code> and <code>END</code>
+</ul>
+</p>
+
+<p>
+Let <code>xi</code> and <code>xj</code> be variables and let <code>c</code> be
+a constant. Then
+
+<pre>
+xi := xj + c
+</pre>
+and
+<pre>
+xi := xj - c
+</pre>
+
+are Loop programs.
+</p>
+
+<p>
+Let <code>P1</code> and <code>P2</code> be Loop programs. Then
+
+<pre>
+P1; P2
+</pre>
+
+is a Loop Program.
+</p>
+
+<p>
+Let <code>P</code> be a Loop program and let <code>xi</code> be a variable. 
+Then
+
+<pre>
+LOOP xi DO P END
+</pre>
+
+is a Loop Program.
+</p>
+
 
 <h3 id="loop-semantics">Semantics</h3>
 
+<p>
+Let <code>P</code> be a Loop Program. <code>P</code> computes a function
+<span class="math"><em>f</em>: ℕ <sup><em>k</em></sup> → ℕ </span> like so:
+At the beginning of the computation the arguments 
+<span class="math"><em>n</em><sub>1</sub>, …, <em>n</em><sub><em>k</em></sub> ∈ ℕ </span> 
+are to be found in the variables <code>x1</code>, …,<code>xk</code>. All other
+variables have the starting value 0. <code>P</code> is executed as follows:
+</p>
+
+<p>
+<ul>
+<li>By executing the program "<code>xi := xj + c</code>" <code>xi</code> is
+assigned the value of <code>xj + c</code>.
+<li>By executing the program "<code>xi := xj - c</code>" <code>xi</code> is
+assigned the value of <code>xj - c</code> if the value is non-negative. 
+Otherwise <code>xi</code> is assigned 0.
+<li>By executing the program "<code>P1; P2</code>" at first <code>P1</code> is
+executed and after that <code>P2</code>. 
+<li>The execution of the program "<code>LOOP xi DO P' END</code>" happens as
+follows: The Program <code>P'</code> is executed as often as the value of
+<code>xi</code> has been at the Beginning. That means, assignments to
+<code>xi</code> inside <code>P'</code> do <i>not</i> influence the number of
+repetitions.
+</ul>
+</p>
+
+<p>
+The result of <code>P</code>'s execution is the value of <code>x0</code> or put in another way
+<span class="math"><em>f</em>(<em>n</em><sub>1</sub>, …, <em>n</em><sub><em>k</em></sub>) = Value of <code>x0</code> after execution </span>.
+</p>
+
+<p>
+A function <span class="math"><em>f</em>: ℕ <sup><em>k</em></sup> → ℕ </span> is 
+called <i>Loop-computable</i> if there exists a Loop program that computes
+<i>f</i> as described above.
+</p>
+
+
 <h3 id="loop-extensions">Extensions</h3>
+
+<p>
+Variables can be named arbitrarily. The only restrictions are that they begin
+with a letter and are not a keyword, e.g. <code>counter4</code> is a valid
+variable identifier. Apart from that the following Loop programs are all valid
+and have the respective intuitive semantics:
+</p>
+
+<p>
+<ul>
+<li><code>xi := xj</code> (stands for <code>xi := xj + 0</code>)
+<li><code>xi := c</code> (stands for <code>xi := xj + c</code> where <code>xj</code> is an unused variable)
+<li><code>xi := aexp</code> where <code>aexp</code> is an arbitrary arithmetic
+expression consisting of variables, constants, (optional) parantheses and operators
+(<code>+</code>,<code>-</code>,<code>*</code>,<code>/</code>,<code>^</code> and
+<code>%</code>) like for example <code>y * (hg + 8 / x8) - 2 % 4</code>.
+<li><code>LOOP aexp DO P END</code> where <code>aexp</code> is an arbitrary
+arithmetic expression.
+<li><code>IF xi = 0 THEN P END</code>
+<li><code>IF !(xi &lt; xj &amp;&amp; !(xk != 3)) THEN P1 ELSE P2 END</code>
+<li><code>IF bexp THEN P END</code> where <code>bexp</code> is an arbitrary
+"boolean" expression consisting of variables, constants, (optional) parantheses, 
+relational operators (<code>&lt;</code>,<code>&lt;=</code>,<code>&gt;</code>,<code>&gt;=</code>,<code>=</code> and <code>!=</code>)
+and boolean operators (<code>&amp;&amp;</code>,<code>||</code> and <code>!</code>).
+<li><code>IF bexp THEN P1 ELSE P2 END</code>
+</ul>
+</p>
+
+<p>
+Also, you are allowed to insert comments in your source code. The syntax is
+similar to Java's comment syntax, i.e. <code>//</code> introduces a comment
+whose scope ends at the next line and <code>/* */</code> can be used for
+multiline comments.
+</p>
 
 
 <h2 id="goto">Goto</h2>
 
+<p>An exemplary (extended and pointless) Goto program looks as follows:</p>
+
+<pre>
+M1: x4 := abc + y * 4;
+Cool: IF hg != 7 || hg != 7 THEN GOTO M1 ELSE HALT END;
+GOTO Cool;
+M42: HALT
+</pre>
+
+
 <h3 id="goto-syntax">Syntax</h3>
+
+<p>
+A Goto program is a succession
+</p>
+
+<pre>
+M1: A1;
+M2: A2;
+   ⋮
+Mk: Ak
+</pre>
+
+<p>
+where <code>Mi</code> is a so called <em>label</em> and <code>Ai</code> is an
+instruction. Possible instructions are:
+</p>
+
+<ul>
+<li>Value assignment: <code>xi := xj ± c</code> (<code>xi</code>, <code>xj</code> are variables, <code>c</code> is a constant)
+<li>Jump: <code>GOTO Mi</code>
+<li>Conditional Jump: <code>IF xi = c THEN GOTO Mj</code>
+<li>Stop instruction: <code>HALT</code>
+</ul>
+
+<p>
+The last instruction is either a stop instruction or a jump.
+</p>
 
 <h3 id="goto-semantics">Semantics</h3>
 
+<p>
+The execution of a Goto program starts with the first instruction. The
+execution of instructions of each type is as follows:
+</p>
+
+<ul>
+<li>"<code>xi := xj ± c</code>": The value of <code>xi</code> becomes <code>xj ± c</code>
+and the next instruction is executed.
+<li>"<code>GOTO Mi</code>": Proceed with the instruction with label <code>Mi</code>.
+<li>"<code>IF xi = c THEN GOTO Mj</code>": If the value of <code>xi</code> is
+equal to <code>c</code> proceed with the instruction with label <code>Mj</code>.
+Otherwise the next instruction is executed.
+<li>"<code>HALT</code>": Stop the execution of the program.
+</ul>
+
+<p>A jump to a label that is not existent in the program is not defined.</p>
+
+<p>
+Let <code>P</code> be a Goto Program. <code>P</code> computes a function
+<span class="math"><em>f</em>: ℕ <sup><em>k</em></sup> → ℕ </span> like so:
+At the beginning of the computation the arguments 
+<span class="math"><em>n</em><sub>1</sub>, …, <em>n</em><sub><em>k</em></sub> ∈ ℕ </span> 
+are to be found in the variables <code>x1</code>, …,<code>xk</code>. All other
+variables have the starting value 0.
+</p>
+
+<p>
+<span class="math"><em>f</em>(<em>n</em><sub>1</sub>, …, <em>n</em><sub><em>k</em></sub>)</span> 
+is the value of <code>x0</code> after execution if <code>P</code> terminates. Otherwise 
+<span class="math"><em>f</em>(<em>n</em><sub>1</sub>, …, <em>n</em><sub><em>k</em></sub>)</span> is undefined.
+</p>
+
+<p>
+A function <span class="math"><em>f</em>: ℕ <sup><em>k</em></sup> → ℕ </span> is 
+called <i>Goto-computable</i> if there exists a Goto program that computes
+<i>f</i> as described above.
+</p>
+
 <h3 id="goto-extensions">Extensions</h3>
+
+<p>
+Labels can be named arbitrarily or can be omitted altogether. Note, tough,
+that labels must be unique. Apart from that, all extensions from the Loop
+language - except for the <code>LOOP</code> construct which is not present in
+the extended Goto language - apply to the extended Goto language. Furthermore,
+a <code>HALT</code> statement may appear in the body of an <code>IF</code>.
+</p>
 
 
 <h2 id="while">While</h2>
 
+<p>The While language is an extension of the Loop language.
+An exemplary (extended and pointless) While program looks as follows:</p>
+
+<pre>
+x4 := abc + y * 4;
+IF hg != 7 || hg != 7 THEN 
+  WHILE !(x4 = x4 + 1) DO
+    x0 := 1
+  END
+ELSE 
+  x0 := counter
+END
+</pre>
+
+
 <h3 id="while-syntax">Syntax</h3>
+
+<p>
+Apart from the <code>LOOP</code> construct which is not part of the While 
+language the syntax is the same as that of Loop. Additionally, a new keyword 
+(<code>WHILE</code>) with the accompanying syntactical construct, namely the
+<code>WHILE</code> loop, is introduced.
+</p>
+
+<p>
+Let <code>P</code> be a While program and let <code>xi</code> be a variable.
+Then
+
+<pre>
+WHILE xi != 0 DO P END
+</pre>
+
+is a While program.
+</p>
+
 
 <h3 id="while-semantics">Semantics</h3>
 
+<p>
+The execution of "<code>WHILE xi != 0 DO P END</code>" happens so, that the
+program <code>P</code> is executed as long as the value of <code>xi</code>
+is not equal to 0.
+</p>
+
+<p>
+Let <code>P</code> be a While Program. <code>P</code> computes a function
+<span class="math"><em>f</em>: ℕ <sup><em>k</em></sup> → ℕ </span> like so:
+At the beginning of the computation the arguments 
+<span class="math"><em>n</em><sub>1</sub>, …, <em>n</em><sub><em>k</em></sub> ∈ ℕ </span> 
+are to be found in the variables <code>x1</code>, …,<code>xk</code>. All other
+variables have the starting value 0.
+</p>
+
+<p>
+<span class="math"><em>f</em>(<em>n</em><sub>1</sub>, …, <em>n</em><sub><em>k</em></sub>)</span> 
+is the value of <code>x0</code> after execution if <code>P</code> terminates. Otherwise 
+<span class="math"><em>f</em>(<em>n</em><sub>1</sub>, …, <em>n</em><sub><em>k</em></sub>)</span> is undefined.
+</p>
+
+<p>
+A function <span class="math"><em>f</em>: ℕ <sup><em>k</em></sup> → ℕ </span> is 
+called <i>While-computable</i> if there exists a While program that computes
+<i>f</i> as described above.
+</p>
+
+
 <h3 id="while-extensions">Extensions</h3>
-<p>while head can have bexp, rest like loope</p>
+
+<p>
+Apart from the <code>LOOP</code> related extensions - since the While language
+has no <code>LOOP</code> construct - the Loop extensions are all valid While
+extensions. Additionally, the head of a <code>WHILE</code> loop can have an
+arbitrary boolean expression, e.g. <code>WHILE xyz != 9 || u = 8 DO P END</code>
+is a valid (extended) While program.
+<p>
 
 
 <h1 id="exercises">Exercises</h1>
@@ -165,17 +456,30 @@ exercises, e.g. if you showed how an <code>IF</code> can be transformed into
 strict Loop program you can use this knowledge throughout the following 
 exercises unless it is explicitly forbidden in an exercise.<p>
 
-<p>Various sources for the exercises have been used. Some of exercises were my
-idea whereas others were taken from the exercises of Prof Dr. Heribert
-Vollmer's introductory course in theoretical computer science and yet others
-from <a href="http://projecteuler.net/">Project Euler</a>.</p>
+<p>Various sources for the exercises have been used. Some exercises were my
+idea whereas others were taken from Prof Dr. Heribert Vollmer's introductory 
+course in theoretical computer science and yet others from 
+<a href="http://projecteuler.net/">Project Euler</a>.</p>
 
 <ol>
 <li>
-<p>What is the general algorithm for correctly altering the labels when 
-transforming an extended Goto program to the strict version?<p>
+<p>For some reason you are sick of using the <code>LOOP</code> construct in the
+strict Loop language. You want to rewrite all your Loop programs to be free of
+that dreaded <code>LOOP</code>. None of your programs use arguments. How could
+you do it?</p>
 
-<p>Try your algorithm on this code:<p>
+<li>
+<p>For some reason you are now sick of using the <code>WHILE</code> construct
+in the extended While language. You want to rewrite all your While programs to
+be free of that dreaded <code>WHILE</code>. You know for sure that <i>none</i>
+of your <code>WHILE</code> loops does more than ten iterations. How could you
+do it?</p>
+
+<li>
+<p>Describe an algorithm for correctly relabeling the code of an extended Goto
+program when transforming it to the strict version! Consider all cases!<p>
+
+<p>Try your algorithm on this snippet:<p>
  
 <pre>
 - TODO: put this code with a special case here (see tests but simpler)
@@ -193,36 +497,35 @@ changed to M5. If it is not somehow marked, then on line 6 all M5's will be
 renamed, including the one on line M2 (if it has not been marked).
 </pre>
 
-<p>To test if your transformation algorithm is correct simply compare the
-mechanical output of the transformation of the given code with your
-self-transformed code.<p>
+<p>To test if your algorithm is correct simply compare the output of the
+evaluation service for the transformation of the given code with your
+hand-transformed code.<p>
 
 <li>
 - Focus on Loop, mix the order so that not 5 of a category in a row,
 only allow the features to use for writing code when transform to strict
 was done for that feature
-- ~ 5 write some code (euler, gti etc.)
-- ~ 2 guess some code
-- ~ 10 transform to strict (IF, arith)
-  - IF a && b then...
-  - IF a || b then...
-  - arithemtic expressions like x0 := x1 + x2
-  - Loop aexp DO ...
+    - ~ 5 write some code (euler, gti etc.)
+    - ~ 2 guess some code
+    - ~ 10 transform to strict (IF, arith)
+      - IF a && b then...
+      - IF a || b then...
+      - arithemtic expressions like x0 := x1 + x2
+      - Loop aexp DO ...
 - Focus on while
-- Give an example of a while program that cannot be transformed to loop.
-- ~ 2 write some code
-- ~ 1 guess some code
+    - Give an example of a while program that cannot be transformed to loop.
+    - ~ 2 write some code
+    - ~ 1 guess some code
 - Focus on goto
-- ~ 2 write some code
-- ~ 1 guess some code (gti)
-- how can to transform "IF xy THEN HALT END" to strict?
-- this question about relabeling
+    - ~ 2 write some code
+    - ~ 1 guess some code (gti)
+    - how can to transform "IF xy THEN HALT END" to strict?
 - Alle drei susammen
-- transform loop loop to while/goto
-- how does the general transformation from while to goto work?
-- how does the general transformation from goto to while work?
-- Bonus: which of the languages are turing-complete? Proof in each case wether
-it is or not.
+    - transform loop loop to while/goto
+    - how does the general transformation from while to goto work?
+    - how does the general transformation from goto to while work?
+    - Bonus: which of the languages are turing-complete? Proof in each case wether
+    it is or not.
 </ol>
 <!-- End of Content -->
     </div>
@@ -260,10 +563,60 @@ it is or not.
       mode: "loop"
     });
 
+    /****** Usability of Buttons ******/
+    runBtn = $("#run");
+    transBtn = $("#transform");
+
+    function runBtnPress() {
+      runBtn.attr("disabled", true);
+      transBtn.attr("disabled", true);
+      if(!runBtn.hasClass("activeBtn")) {
+        runBtn.addClass("activeBtn");
+      }
+      if(!transBtn.hasClass("disabledBtn")) {
+        transBtn.addClass("disabledBtn");
+      }
+    }
+
+    function runBtnRelease() {
+      runBtn.attr("disabled", false);
+      transBtn.attr("disabled", false);
+      if(runBtn.hasClass("activeBtn")) {
+        runBtn.removeClass("activeBtn");
+      }
+      if(transBtn.hasClass("disabledBtn")) {
+        transBtn.removeClass("disabledBtn");
+      }
+    }
+
+    function transBtnPress() {
+      runBtn.attr("disabled", true);
+      transBtn.attr("disabled", true);
+      if(!transBtn.hasClass("activeBtn")) {
+        transBtn.addClass("activeBtn");
+      }
+      if(!runBtn.hasClass("disabledBtn")) {
+        runBtn.addClass("disabledBtn");
+      }
+    }
+
+    function transBtnRelease() {
+      runBtn.attr("disabled", false);
+      transBtn.attr("disabled", false);
+      if(transBtn.hasClass("activeBtn")) {
+        transBtn.removeClass("activeBtn");
+      }
+      if(runBtn.hasClass("disabledBtn")) {
+        runBtn.removeClass("disabledBtn");
+      }
+    }
+
     /****** Ajax ******/ 
     var output = $("#output");
     
     $("#run").click(function(){
+      runBtnPress();
+      output.val("");
       myCodeMirror.save();
       var sourceCode = $("#source-code").val();
       var args = $("#source-args").val();
@@ -280,22 +633,32 @@ it is or not.
         url: url,
         data: { source: sourceCode, args: args },
         success: function(data) {
-          output.val(data);
-          if(output.hasClass("red")) {
-            output.removeClass("red");
-          }
+          //Make delay artificially a little longer
+          output.delay(500, "myQueue").queue("myQueue", function(){ 
+            runBtnRelease();
+            output.val(data);
+            if(output.hasClass("red")) {
+              output.removeClass("red");
+            }
+          }).dequeue("myQueue");
         },
         error: function(xhr) {
-          output.val("Error: " + xhr.responseText);
-          if(!output.hasClass("red")) {
-            output.addClass("red");
-          }
+          //Make delay artificially a little longer
+          output.delay(500, "myQueue").queue("myQueue", function(){ 
+            runBtnRelease();
+            output.val("Error: " + xhr.responseText);
+            if(!output.hasClass("red")) {
+              output.addClass("red");
+            }
+          }).dequeue("myQueue");
         }
       });
       return false;
     });
 
     $("#transform").click(function(){
+      transBtnPress();
+      output.val("");
       myCodeMirror.save();
       var sourceCode = $("#source-code").val();
       var sourceLang = $("#source-lang").val();
@@ -307,16 +670,24 @@ it is or not.
         url: url,
         data: { source: sourceCode },
         success: function(data) {
-          output.val(data);
-          if(output.hasClass("red")) {
-            output.removeClass("red");
-          }
+          //Make delay artificially a little longer
+          output.delay(500, "myQueue").queue("myQueue", function(){ 
+            transBtnRelease();
+            output.val(data);
+            if(output.hasClass("red")) {
+              output.removeClass("red");
+            }
+          }).dequeue("myQueue");
         },
         error: function(xhr) {
-          output.val("Error: " + xhr.responseText);
-          if(!output.hasClass("red")) {
-            output.addClass("red");
-          }
+          //Make delay artificially a little longer
+          output.delay(500, "myQueue").queue("myQueue", function(){ 
+            transBtnRelease();
+            output.val("Error: " + xhr.responseText);
+            if(!output.hasClass("red")) {
+              output.addClass("red");
+            }
+          }).dequeue("myQueue");
         }
       });
       return false;

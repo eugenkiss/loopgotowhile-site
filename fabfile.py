@@ -18,6 +18,7 @@ def backup():
     local('git push -f ~/Dropbox/backup/loopgotowhile-site.git')
 
 def compile(profiling):
+    local('rm -rf ' + os.path.join(ROOT_PATH, 'dist/'))
     if profiling:
         local('cabal configure --enable-executable-profiling --enable-library-profiling --ghc-option=-auto-all')
     else:
@@ -33,6 +34,8 @@ def copy(path):
                   os.path.join(path, 'index.html'))
     local('cp ' + os.path.join(ROOT_PATH, 'style.css') + ' ' +
                   os.path.join(path, 'style.css'))
+    local('cp ' + os.path.join(ROOT_PATH, 'bg.jpg') + ' ' +
+                  os.path.join(path, 'bg.jpg'))
     local('cp ' + os.path.join(ROOT_PATH, 'dist/build/LGWServer/LGWServer') + ' ' +
                   os.path.join(path, 'LGWServer'))
     local('cp -r ' + os.path.join(ROOT_PATH, 'codemirror') + ' ' +
@@ -49,7 +52,7 @@ def test():
 
 @hosts(PROD)
 def update_static_files():
-    copy()
+    copy(DEPLOY_PATH)
     project.rsync_project(
         remote_dir=DEST_PATH,
         local_dir=DEPLOY_PATH.rstrip('/') + '/',

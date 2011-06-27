@@ -43,6 +43,9 @@ If there would be an easy way to spit out Javascript from Haskell code I'd
 rather do that and have the interpreters run on the client side instead of
 running a program on the server.
 
+<http://johnmacfarlane.net/pandoc/try> was used to convert LaTeX math formulas
+to html.
+
 
 What are some suggestions for future improvements?
 --------------------------------------------------
@@ -70,9 +73,5 @@ What are some suggestions for future improvements?
 
 ### Usability
 
-- When clicking the "run" or "transform" button both of them should be disabled
-  until the server responded. Better yet, the clicked button should drop down
-  a bit into the background and be released again after a response (like a real
-  button)
 - The selects and the checkbox should be styled so that they fit the theme
   instead of relying on the standard browser styling.

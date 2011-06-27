@@ -1,6 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold);
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans+Mono&v1);
 @import url(http://fonts.googleapis.com/css?family=Coda+Caption:800&v1);
-@import url(http://fonts.googleapis.com/css?family=VT323);
 
 /*---------------------------------------------------------------------------*/
 
@@ -164,16 +164,27 @@ a:link { -webkit-tap-highlight-color: #FF5E99; } /* j.mp/webkit-tap-highlight-co
 
 html {
     min-width: 850px;
-    background: #27221A;
+    overflow-y: auto;
+    /*background: #27221A;*/
+    background: url("bg.jpg") repeat fixed 0 0 transparent;
     -webkit-font-smoothing: antialiased;
 }
 
 body {
     font-family: "Droid Sans", Helvetica, Arial, sans-serif;
     font-size: 15px;
-    margin-right: 200px;
+    padding-right: 200px;
     margin-left: 1em;
     color: #F6E6CC;
+
+    /* For custom scrollbar */
+    /*position: absolute;*/ /* Unfortunately doesn't work with smooth scrolling */
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 p {
@@ -198,30 +209,105 @@ hr {
 }
 
 select {
-    font-family: "Coda Caption";
-    font-size: 12px;
+    /*font-family: "Coda Caption";*/
+    /*font-size: 12px;*/
+    outline: none;
 }
 
 input[type="checkbox"] {
     vertical-align: -2px;
 }
 
-button, input {
-    font-family: "Coda Caption";
-    font-size: 12px;
+button, input[type="submit"] {
+    font-family: "Droid Sans", "Droid Sans Mono", Monaco, monospace;
+    display: inline-block;
+    position: relative;
     outline: none;
-    color: #BA832C;
-    padding: 0.2em 0.6em;
-    margin: 0 0.3em;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    font-weight: bold;
-    background: rgba(162, 107, 20, 0.3);
-    border-radius: 0.3em;
-    -moz-border-radius: 0.3em;
-    -webkit-border-radius: 0.3em;
-    -moz-box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.55);
-    -webkit-box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.55);
-    box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.55);
+    color: lightgreen;
+    text-shadow: 0px 2px 1px rgba(0,0,0,0.9);
+    padding: 0.3em 0.7em;
+
+    -webkit-transition:color 0.1s ease-in;  
+    -moz-transition:color 0.1s ease-in;  
+    -o-transition:color 0.1s ease-in;  
+    transition:color 0.1s ease-in; 
+
+    border: 1px solid rgba(0,0,0,0.5);
+    border-radius: 6px;
+    background: rgba(16, 30, 10, 1.0);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5), 
+                inset 0 1px rgba(255,255,255,0.3), 
+                inset 0 10px 20px rgba(255,255,255,0.25), 
+                inset 0 -15px 30px rgba(0,0,0,0.3);
+    -o-box-shadow: 0 2px 6px rgba(0,0,0,0.5), 
+                   inset 0 1px rgba(255,255,255,0.3), 
+                   inset 0 10px 20px rgba(255,255,255,0.25), 
+                   inset 0 -15px 30px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0 2px 6px rgba(0,0,0,0.5), 
+                        inset 0 1px rgba(255,255,255,0.3), 
+                        inset 0 10px 20px rgba(255,255,255,0.25), 
+                        inset 0 -15px 30px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 2px 6px rgba(0,0,0,0.5), 
+                     inset 0 1px rgba(255,255,255,0.3), 
+                     inset 0 10px 20px rgba(255,255,255,0.25), 
+                     inset 0 -15px 30px rgba(0,0,0,0.3);
+}
+
+button:hover, input[type="submit"]:hover {
+    background: rgba(75, 20, 10, 1.0);
+    -webkit-transition:background 0.1s ease-in;  
+    -moz-transition:background 0.1s ease-in;  
+    -o-transition:background 0.1s ease-in;  
+    transition:background 0.1s ease-in; 
+}
+
+button:active, input[type="submit"]:active {
+    top: 1px;
+    background: rgba(75, 20, 10, 1.0);
+    -webkit-transition:background 0.1s ease-in;  
+    -moz-transition:background 0.1s ease-in;  
+    -o-transition:background 0.1s ease-in;  
+    transition:background 0.1s ease-in; 
+}
+
+.disabledBtn {
+    color: rgba(0,0,0,0.5) !important;
+    -webkit-transition:color 0.1s ease-in;  
+    -moz-transition:color 0.1s ease-in;  
+    -o-transition:color 0.1s ease-in;  
+    transition:color 0.1s ease-in; 
+    text-shadow: 0px 1px 1px rgba(255,255,255,0.1) !important;
+}
+
+.disabledBtn:hover {
+    background: rgba(16, 30, 10, 1.0) !important;
+    color: rgba(0,0,0,0.5) !important;
+    text-shadow: 0px 1px 1px rgba(255,255,255,0.1) !important;
+}
+
+.disabledBtn:active {
+    top: 0 !important;
+    background: rgba(16, 30, 10, 1.0) !important;
+    color: rgba(0,0,0,0.5) !important;
+    text-shadow: 0px 1px 1px rgba(255,255,255,0.1) !important;
+}
+
+.activeBtn {
+    top: 1px;
+    color: rgba(0,0,0,0.5) !important;
+    text-shadow: 0px 1px 1px rgba(255,255,255,0.1) !important;
+    background: rgba(75, 20, 10, 1.0) !important;
+    -webkit-transition:color 0.1s ease-in;  
+    -moz-transition:color 0.1s ease-in;  
+    -o-transition:color 0.1s ease-in;  
+    transition:color 0.1s ease-in; 
+}
+
+.activeBtn:active {
+    top: 1px;
+    color: rgba(0,0,0,0.5) !important;
+    text-shadow: 0px 1px 1px rgba(255,255,255,0.1) !important;
+    background: rgba(75, 20, 10, 1.0) !important;
 }
 
 header, h1, h2, h3, h4 {
@@ -326,11 +412,11 @@ footer {
 }
 
 pre, code {
-    font-family: VT323, Monaco, monospace;
-    font-size: 1.25em;
+    font-family: "Droid Sans Mono";
 }
 
 pre {
+    background: rgba(0, 0, 0, 0.3);
     margin: 0.5em 2em;
     padding: 0.5em;
     border-radius: 0.4em;
@@ -343,10 +429,6 @@ code {
     border-radius: 0.2em;
     -moz-border-radius: 0.2em;
     -webkit-border-radius: 0.2em;
-}
-
-code, pre {
-    background: rgba(0, 0, 0, 0.3);
 }
 
 .CodeMirror code, .CodeMirror pre {
@@ -364,15 +446,15 @@ textarea#source-code, textarea#output {
 textarea#source-code, textarea#output, input#source-args, .CodeMirror {
     outline: none;
     color: lightgreen;
-    font-family: VT323, Monaco, monospace;
-    font-size: 1.25em;
+    font-family: "Droid Sans Mono", Monaco, monospace;
+    font-size: 1em;
     box-sizing: border-box;
     -webkit-box-sizing:border-box;
     -moz-box-sizing: border-box;
 
     border: 1px solid rgba(0,0,0,0.5);
     border-radius: 10px 10px 5px 5px;
-    background: rgba(0,30,0,0.85);
+    background: rgba(16,30,12,1);
     box-shadow: 0 2px 6px rgba(0,0,0,0.5), 
                 inset 0 1px rgba(255,255,255,0.3), 
                 inset 0 10px rgba(255,255,255,0.1), 
@@ -397,6 +479,7 @@ textarea#source-code, textarea#output, input#source-args, .CodeMirror {
 
 input#source-args {
     border-radius: 3px 3px 3px 3px;
+    padding: 0.3em;
 }
 
 ::-webkit-scrollbar {  
@@ -406,7 +489,7 @@ input#source-args {
     -webkit-border-radius: 5px;  
 }  
   
-::-webkit-scrollbar-thumb {  
+::-webkit-scrollbar-thumb { 
     background: rgba(0,0,0,0.3);  
    -webkit-border-radius: 5px;  
 }  
