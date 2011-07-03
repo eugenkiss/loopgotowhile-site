@@ -10,6 +10,39 @@ by [CodeMirror][]. The design of the site is inspired by [Homebrew][].
   [homebrew]: http://mxcl.github.com/homebrew/
 
 
+How to install this project?
+----------------------------
+
+1. Install the [Haskell platform].  This will give you [GHC] and
+the [cabal-install] build tool.
+
+2. Install [loopgotowhile][]. Instructions are to be found in the README. 
+
+3. Clone this project and build it with `cabal`:
+
+        git clone git://github.com/eugenkiss/loopgotowhile-site.git
+        cd loopgotowhile-site
+        cabal build
+
+Now you'll have the executable `loopgotowhile-site/dist/build/LGWServer`. You
+can run it and a server will be started that listens to port `8000` and can
+process special post requests to execute or transform code. See `LGWServer.hs`
+for more details. However, the server does not serve static files by default.
+To enable serving static files you must give the executable the `test`
+parameter like so `LGWServer test`. Note, that you must run the executable from
+the main project's folder, i.e. `loopgotowhil`, so that the server can find the
+files.
+
+For further convenience install [fabric][] and adapt `fabfile.py`. Then you can
+use some shortcut commands to e.g. upload this project to your server and serve
+static files with ngnix. See `fabfile.py` for more details.
+
+[GHC]: http://www.haskell.org/ghc/
+[Haskell platform]: http://hackage.haskell.org/platform/
+[cabal-install]: http://hackage.haskell.org/trac/hackage/wiki/CabalInstall
+[fabric]: http://docs.fabfile.org/en/1.1.1/index.html
+
+
 How are the resources limited for the evaluation service?
 ---------------------------------------------------------
 
@@ -54,12 +87,12 @@ What are some suggestions for future improvements?
 
 - I dont' like the current way of limiting computations with an MVar. There is 
   one global MVar, but I would like to have like 4 global MVars and only if all 
-  are not empty disallow further compuations. Or I'd like to have an MVar that 
-  is local to a process (or is it by default?), so that when I have 2 processes 
-  2 concurrent compuations can occure but not more.
-- Maybe change to Yesod? The memory usage of the evaluation service is too
-  high imho. With Yesod, it seems, I could even go without nginx as Warp seems
-  to be good enough to serve static content.
+  are not empty disallow further compuations. Or, even better, I'd like to have 
+  an MVar that is local to a process (or is it by default?), so that, when I
+  have 2 processes, 2 concurrent compuations can occure but not more.
+- Maybe change to Yesod? The memory usage of the evaluation service is a bit 
+  too high imho. With Yesod, it seems, I could even go without nginx as Warp 
+  seems to be good enough to serve static content.
 
 
 ### Editor
