@@ -82,7 +82,7 @@
 
 <p>This site contains an evaluation service, exercises and the specifications
 for the programming languages <i>Loop, Goto & While</i>. You never heard of 
-them, you say? No problem, that's what this about section was made for.</p>
+them, you say? No problem, that's what this section was made for.</p>
 
 <p>The languages are taken from 
 <a href="http://www.thi.uni-hannover.de/en/homepage/people/heribert-vollmer/">Prof Dr. Heribert Vollmer</a>'s
@@ -98,7 +98,7 @@ Frankly, why should there have been? Their purpose didn't require that. However,
 exercise to create exectuable implementations for these languages. Even more so 
 as I always wanted to create an executable implementation of a programming 
 language and it was the perfect opportunity to get to know Haskell better
-(as the parsers/transformer/evaluators and the web evaluation service are 
+(as the parsers, transformers, evaluators and the web evaluation service are 
 written in Haskell). Have a look at the
 <a href="https://github.com/eugenkiss/loopgotowhile">source code of this site</a>, the 
 <a href="https://github.com/eugenkiss/loopgotowhile-site">source code of the interpreters</a> or the
@@ -123,7 +123,7 @@ don't you?</p>
 whose codomain are the natural numbers and whose domain are the natural numbers
 to the power of <i>n</i>, where <i>n</i> is the number of arguments. Also,
 every variable is by default initialized to <code>0</code> and arguments, if
-any, are stored in <code>x1,...,xn</code>. That means, providing the argument
+any, are stored in <code>x1, …,xn</code>. That means, providing the argument
 list <code>4,87,3</code> is the same as prepending <code>x1 := 4; x2 := 87, x3
 := 3</code> to the top of your program. Also, note that each language is
 case sensitive!</p>
@@ -203,7 +203,7 @@ Let <code>P</code> be a Loop Program. <code>P</code> computes a function
 <span class="math"><em>f</em>: ℕ <sup><em>k</em></sup> → ℕ </span> like so:
 At the beginning of the computation the arguments 
 <span class="math"><em>n</em><sub>1</sub>, …, <em>n</em><sub><em>k</em></sub> ∈ ℕ </span> 
-are to be found in the variables <code>x1</code>, …,<code>xk</code>. All other
+are to be found in the variables <code>x1</code>, …,<code>xk</code>. All other
 variables have the starting value 0. <code>P</code> is executed as follows:
 </p>
 
@@ -357,11 +357,17 @@ called <i>Goto-computable</i> if there exists a Goto program that computes
 <h3 id="goto-extensions">Extensions</h3>
 
 <p>
-Labels can be named arbitrarily or can be omitted altogether. Note, tough,
-that labels must be unique. Apart from that, all extensions from the Loop
-language - except for the <code>LOOP</code> construct which is not present in
-the extended Goto language - apply to the extended Goto language. Furthermore,
+The program doesn't have to end with a jump or a stop instruction. Labels can
+be named arbitrarily or can be omitted altogether. Note, tough, that labels
+must be unique. <code>IF</code> statements must be completed with the lexeme
+<code>END</code> because they can contain several statements. Furthermore,
 a <code>HALT</code> statement may appear in the body of an <code>IF</code>.
+</p>
+
+<p>
+Apart from that, all extensions from the Loop language - except for the
+<code>LOOP</code> construct which is not present in the extended Goto language
+- apply to the extended Goto language. 
 </p>
 
 
@@ -463,17 +469,189 @@ course in theoretical computer science and yet others from
 
 <ol>
 <li>
+Show that the function 
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>):  = <em>x</em><sub>1</sub> + <em>x</em><sub>2</sub></span>
+is Loop-computable by writing a (strict) Loop program that computes this
+function.
+
+<li>
+Show that the function
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>):  = <em>x</em><sub>1</sub> - <em>x</em><sub>2</sub></span>
+is Loop-computable. Here <span class="math"><em>f</em></span> really stands for
+<span class="math">max{<em>x</em><sub>1</sub> - <em>x</em><sub>2</sub>, 0}</span>.
+
+<li>
+Write a Loop Program that computes the sum of the numbers 1 to 1000.
+
+<li>
+Write a Loop Program that is equivalent to the following construct:
+<pre>
+IF xi != 0 THEN P END
+</pre>
+
+<li>
+Write a Loop Program that is equivalent to the following construct:
+<pre>
+IF xi = 0 THEN P1 ELSE P2 END
+</pre>
+
+<li>
+Show that the function
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>):  = <em>x</em><sub>1</sub> ⋅ <em>x</em><sub>2</sub></span>
+is Loop-computable.
+
+<li>
+Show that the function
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>):  = <em>x</em><sub>1</sub>!</span>
+is Loop-computable.
+
+<li>
+Show that the function
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>):  = <em>x</em><sub>1</sub><sup><em>x</em><sub>2</sub></sup></span>
+is Loop-computable.
+
+<li>
+Write a Loop Program that is equivalent to the following construct:
+<pre>
+IF xi = xj THEN P END
+</pre>
+
+<li>
+Write a Loop Program that is equivalent to the following construct:
+<pre>
+IF xi &gt; xj THEN P1 ELSE P2 END
+</pre>
+
+<li>
+Write a Loop Program that is equivalent to the following construct:
+<pre>
+IF xi &gt;= xj THEN P1 ELSE P2 END
+</pre>
+
+<li>
+Show that the function
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>):  = <em>x</em><sub>1</sub> / <em>x</em><sub>2</sub></span>
+is Loop-computable. Here "/" stands for integer division, i.e. the rest is
+discarded.
+
+<li>
+Show that the function
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>):  = <em>x</em><sub>1</sub>%<em>x</em><sub>2</sub> = <em>x</em><sub>1</sub> mod <em>x</em><sub>2</sub></span>
+is Loop-computable. From here on you are allowed to use arbitrary, compound
+arithemtic expressions like <code>x0 := x1 / (x2 + x3) % c</code>.
+
+<li>
+Write a Loop Program that is equivalent to the following construct:
+<pre>
+IF r1 &amp;&amp; r2 THEN P END
+</pre>
+
+<li>
+Write a Loop Program that is equivalent to the following construct:
+<pre>
+IF r1 || r2 THEN P END
+</pre>
+From here on you are allowed to use arbitrary, compound boolean expressions
+(in <code>IF</code> constructs).
+
+<li>
+Write a Loop program that finds the sum of all the multiples of 3 or 5 below 
+50.
+
+<li>
+Write a Loop program that finds the difference of the sum of the squares of the
+first 30 numbers and the square of the sum of the first 30 numbers. 
+
+<li>
+Show that the function
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>):  = ∣bin(<em>x</em><sub>1</sub>)∣</span>
+is Loop-computable. For example, 
+<span class="math"><em>f</em>(1):  = ∣1∣ = 1</span>,
+<span class="math"><em>f</em>(2):  = ∣10∣ = 2</span>,
+<span class="math"><em>f</em>(5):  = ∣101∣ = 3</span>.
+
+<li>
+Write a Loop program that returns 1 if <code>x1</code> is a square and 0
+otherwise.
+
+<li>
+Write a Loop program that returns 1 if <code>x1</code> is a prime number and 0
+otherwise.
+
+<li>
+Which one-argument function does the following Loop program compute:
+<pre>
+LOOP x1 DO
+  t := 0;
+  LOOP c DO
+    t := t + c
+  END;
+  IF t = x1 THEN
+     x0 := c
+  END;
+  c := c + 1
+END
+</pre>
+
+<li>
 <p>For some reason you are sick of using the <code>LOOP</code> construct in the
 strict Loop language. You want to rewrite all your Loop programs to be free of
 that dreaded <code>LOOP</code>. None of your programs use arguments. How could
 you do it?</p>
 
 <li>
+Is the following While program Loop-computable? Justify your answer.
+<pre>
+WHILE x1 != 1 DO
+  x1 := x1 - 2
+END;
+x0 := x1
+</pre>
+
+<li>
+A number is <em>perfect</em> if it is the sum of its factors that are smaller
+than said number. The first three perfect numbers are thus 6, 28 and 496.
+Show that the function
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>):  = the <em>x</em><sub>1</sub>-th perfect number</span>
+is While-computable.
+
+<li>
+Show that the function
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>):  = the <em>x</em><sub>1</sub>-th fibonacci number</span>
+is While-computable.
+
+<li>
 <p>For some reason you are now sick of using the <code>WHILE</code> construct
 in the extended While language. You want to rewrite all your While programs to
 be free of that dreaded <code>WHILE</code>. You know for sure that <i>none</i>
 of your <code>WHILE</code> loops does more than ten iterations. How could you
-do it?</p>
+do it principally?</p>
+
+<li>
+Show that the function 
+<span class="math"><em>f</em>(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>):  = <em>x</em><sub>1</sub> + <em>x</em><sub>2</sub></span>
+is Goto-computable by writing a strict Goto program that computes this
+function.
+
+<li>
+Write a strict Goto program that is equivalent to the following construct:
+<pre>
+IF xi = c THEN HALT END
+</pre>
+
+<li>
+Which one-argument function does the following strict Goto program compute:
+<pre>
+M1: IF x1 = 0 THEN GOTO M5;
+M2: x0 := x0 + 1;
+M3: x1 := x1 - x0;
+M4: GOTO M1;
+M5: HALT
+</pre>
+
+<li>
+Provide an equivalent While program to the previous Goto program and justify
+its correctnes.
 
 <li>
 <p>Describe an algorithm for correctly relabeling the code of an extended Goto
@@ -482,19 +660,12 @@ program when transforming it to the strict version! Consider all cases!<p>
 <p>Try your algorithm on this snippet:<p>
  
 <pre>
-- TODO: put this code with a special case here (see tests but simpler)
-Like:
-
-..: ..
-M2: If .. GOTO M4
-..: ..
-Mx: GOTO M5
-M4: ..
-M5: ..
-
-The problem is that M4 is on fifth position, so that in line 2 with label M2 M4 will be
-changed to M5. If it is not somehow marked, then on line 6 all M5's will be
-renamed, including the one on line M2 (if it has not been marked).
+x0 := x1 + 3;
+Nt: IF x0 = 5 THEN GOTO M4 END;
+M3: x0 := x2 + 3;
+Mx: GOTO M5;
+M4: x0 := x3 + 3; 
+M5: x0 := x4 + 3 
 </pre>
 
 <p>To test if your algorithm is correct simply compare the output of the
@@ -502,38 +673,36 @@ evaluation service for the transformation of the given code with your
 hand-transformed code.<p>
 
 <li>
-- Focus on Loop, mix the order so that not 5 of a category in a row,
-only allow the features to use for writing code when transform to strict
-was done for that feature
-    - ~ 5 write some code (euler, gti etc.)
-    - ~ 2 guess some code
-    - ~ 10 transform to strict (IF, arith)
-      - IF a && b then...
-      - IF a || b then...
-      - arithemtic expressions like x0 := x1 + x2
-      - Loop aexp DO ...
-- Focus on while
-    - Give an example of a while program that cannot be transformed to loop.
-    - ~ 2 write some code
-    - ~ 1 guess some code
-- Focus on goto
-    - ~ 2 write some code
-    - ~ 1 guess some code (gti)
-    - how can to transform "IF xy THEN HALT END" to strict?
-- Alle drei susammen
-    - transform loop loop to while/goto
-    - how does the general transformation from while to goto work?
-    - how does the general transformation from goto to while work?
-    - Bonus: which of the languages are turing-complete? Proof in each case wether
-    it is or not.
+How to generally transform the strict <code>LOOP</code> construct into an
+equivalent While program?
+
+<li>
+How to generally transform the strict <code>LOOP</code> construct into an
+equivalent Goto program?
+
+<li>
+How to generally transform a strict While program into an equivalent Goto
+program?
+
+<li>
+How to generally transform a strict Goto program into an equivalent While
+program?
+
+<li>
+By what factor in the worst case does the running time of a program that is
+first written in Goto and then automatically transformed to While increase?
+
+<li>
+Bonus: Which of the languages is Turing-complete? Proof in each case wether the
+language is Turing-complete or not.
 </ol>
 <!-- End of Content -->
     </div>
     <footer>
     <hr/>
-    <a href="https://github.com/eugenkiss/loopgotowhile">Source Code of the site</a> &bull;
-    <a href="https://github.com/eugenkiss/loopgotowhile-site">Source Code of the interpreters</a> &bull;
-    <a href="http://eugenkiss.com/blog/2011/loop-goto-and-while/">Blog Post about this project</a>
+    <a href="https://github.com/eugenkiss/loopgotowhile">source code of the site</a> &bull;
+    <a href="https://github.com/eugenkiss/loopgotowhile-site">source code of the interpreters</a> &bull;
+    <a href="http://eugenkiss.com/blog/2011/loop-goto-and-while/">blog post about this project</a>
     </footer>
   </div> 
 

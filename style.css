@@ -183,7 +183,8 @@ body {
     left: 0;
     bottom: 0;
     right: 0;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
+    overflow-y: hidden;
     overflow-x: hidden;
 }
 
@@ -482,14 +483,14 @@ input#source-args {
     padding: 0.3em;
 }
 
-::-webkit-scrollbar {  
+#container *::-webkit-scrollbar {  
     height: 1ex;  
     width: 1ex;
     background: rgba(0,0,0,0.1);
     -webkit-border-radius: 5px;  
 }  
   
-::-webkit-scrollbar-thumb { 
+#container *::-webkit-scrollbar-thumb { 
     background: rgba(0,0,0,0.3);  
    -webkit-border-radius: 5px;  
 }  

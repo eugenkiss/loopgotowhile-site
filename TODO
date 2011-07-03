@@ -1,20 +1,8 @@
 - Look at the bottom of http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Concurrent.html
   This is exactly what I need to make sure, that the MVar is written to!
   + Exceptions should not leave the MVar full forever
-- finish content
-    - read test file in loopgotowhile
-    - exercises:
-        - +/- variable
-        - sum of all numbers <= 1000
-        - IF a = 0 THEN P END
-        - *
-        - !
-        - ^
-        - sum of all number not / 3 5 (see euler)
-        - Other ifs (see uebung) + else (ab hier duerfen alle moeglichen ifs benutzt werden
-        - /
-        - % (ab hier duerfen beliebige aexps benutzt werden)
-        - sqrt
-        - ...
 - implement suggestions
-- better website desing (fallout style)
+- There is a problem with customizing the scrollbar with css. If I make body
+  position absolute I get a nice styled scrollbar, but the navigation links
+  don't work, i.e. they don't jump to a section. If I don't make body absolute,
+  then the nav links work, but the scrollbar is not there or goes batshit insane...
