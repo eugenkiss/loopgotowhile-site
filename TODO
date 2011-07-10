@@ -1,8 +1,7 @@
-- Look at the bottom of http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Concurrent.html
-  This is exactly what I need to make sure, that the MVar is written to!
-  + Exceptions should not leave the MVar full forever
-- create javascript output? https://github.com/sviperll/ghcjs
-- implement suggestions
+- Enable `threaded` compile flag when problem 5005 solved
+- Exceptions should not leave the MVar full forever
+- Create javascript output? https://github.com/sviperll/ghcjs
+- Implement suggestions
 - There is a problem with customizing the scrollbar with css. If I make body
   position absolute I get a nice styled scrollbar, but the navigation links
   don't work, i.e. they don't jump to a section. If I don't make body absolute,

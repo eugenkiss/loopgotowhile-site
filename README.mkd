@@ -74,10 +74,23 @@ running on the remote with fabric. It only works every fourth time or so.
 
 If there would be an easy way to spit out Javascript from Haskell code I'd
 rather do that and have the interpreters run on the client side instead of
-running a program on the server.
+running a program on the server for various reasons.
 
 <http://johnmacfarlane.net/pandoc/try> was used to convert LaTeX math formulas
 to html.
+
+Currently, I'm using a poor-man's semaphore approximation to limit the number
+of concurrent operations because I needed something like a non-blocking
+semaphore which I could not find as a library. Nonetheless, my solution seems
+to work just fine. However, when I compile the program with ghc 7.0.2 and
+try to use the executable on my server there is the error 
+
+    epollCreate: unsupported operation (Function not implemented)
+
+The solution is either to use an as-of-yet unreleased new version of ghc with
+bug #5005 fixed or to update the distribution and thus the kernel on my server.
+But I don't want to do the latter so I have to wait until I'll be able to allow
+more than one concurrent computation on my server.
 
 
 What are some suggestions for future improvements?
@@ -85,11 +98,6 @@ What are some suggestions for future improvements?
 
 ### Evaluation Service
 
-- I dont' like the current way of limiting computations with an MVar. There is 
-  one global MVar, but I would like to have like 4 global MVars and only if all 
-  are not empty disallow further compuations. Or, even better, I'd like to have 
-  an MVar that is local to a process (or is it by default?), so that, when I
-  have 2 processes, 2 concurrent compuations can occure but not more.
 - Maybe change to Yesod? The memory usage of the evaluation service is a bit 
   too high imho. With Yesod, it seems, I could even go without nginx as Warp 
   seems to be good enough to serve static content.

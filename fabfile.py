@@ -43,12 +43,13 @@ def copy(path):
 
 def test():
     """Test the server locally"""
-    compile(True)
+    compile(False) # Profiling and using more than one thread is not possible
     # make sure the directory is there!
     local('mkdir -p ' + TEST_PATH)
     copy(TEST_PATH)
     with lcd(TEST_PATH): 
         local('LGWServer test +RTS -hd -p')
+        #local('LGWServer test +RTS -N')
 
 @hosts(PROD)
 def update_static_files():
@@ -81,8 +82,9 @@ def publish():
     )
     update_nginx_conf()
     # Limit cpu usage (cpulimit must be installed on remote)
-    run('nohup cpulimit -e LGWServer -l 40 >& /dev/null < /dev/null &')
+    run('nohup cpulimit -e LGWServer -l 50 >& /dev/null < /dev/null &')
     run('sleep 1s')
     # Run LGWServer in background and limit heap size
-    run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -M30m -RTS >& /dev/null < /dev/null &')
+    #run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -N -M40m -RTS >& /dev/null < /dev/null &')
+    run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -M40m -RTS >& /dev/null < /dev/null &')
     run('sleep 1s')
