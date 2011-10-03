@@ -19,7 +19,7 @@ Source-Repository head
 
 Executable LGWServer
     Main-Is:     LGWServer.hs
-    GHC-Options: -Wall -O2 -static -optc-static -optl-static -fvia-C -optl-pthread -rtsopts -funbox-strict-fields 
+    GHC-Options: -Wall -O2 -static -optc-static -optl-static -optl-pthread -threaded -rtsopts -funbox-strict-fields 
     Build-Depends: 
         base >= 4.0,
         haskell98,

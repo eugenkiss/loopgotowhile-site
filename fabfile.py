@@ -2,7 +2,7 @@ from fabric.api import *
 import os, os.path
 import fabric.contrib.project as project
 
-PROD = 'root@eugenkiss.com:223'
+PROD = 'eugen@eugenkiss.com:223'
 DEST_PATH = '/var/www/loopgotowhile/'
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 DEPLOY_PATH = os.path.join(ROOT_PATH, 'deploy')
@@ -11,8 +11,8 @@ NGINX_CONF_PATH = '/etc/nginx/sites-available/loopgotowhile'
 
 @hosts(PROD)
 def update_nginx_conf():
-    put('nginx.conf', NGINX_CONF_PATH)
-    run('/etc/init.d/nginx reload')
+    put('nginx.conf', NGINX_CONF_PATH, use_sudo=True)
+    sudo('/etc/init.d/nginx reload')
 
 def backup():
     local('git push -f ~/Dropbox/backup/loopgotowhile-site.git')
@@ -85,6 +85,5 @@ def publish():
     run('nohup cpulimit -e LGWServer -l 50 >& /dev/null < /dev/null &')
     run('sleep 1s')
     # Run LGWServer in background and limit heap size
-    #run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -N -M40m -RTS >& /dev/null < /dev/null &')
-    run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -M40m -RTS >& /dev/null < /dev/null &')
+    run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -N -M40m -RTS >& /dev/null < /dev/null &')
     run('sleep 1s')
