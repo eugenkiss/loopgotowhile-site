@@ -2,7 +2,7 @@ from fabric.api import *
 import os, os.path
 import fabric.contrib.project as project
 
-PROD = 'root@eugenkiss.com:223'
+PROD = 'eugen@eugenkiss.com:223'
 DEST_PATH = '/var/www/loopgotowhile/'
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 DEPLOY_PATH = os.path.join(ROOT_PATH, 'deploy')
@@ -11,8 +11,8 @@ NGINX_CONF_PATH = '/etc/nginx/sites-available/loopgotowhile'
 
 @hosts(PROD)
 def update_nginx_conf():
-    put('nginx.conf', NGINX_CONF_PATH)
-    run('/etc/init.d/nginx reload')
+    put('nginx.conf', NGINX_CONF_PATH, use_sudo=True)
+    sudo('/etc/init.d/nginx reload')
 
 def backup():
     local('git push -f ~/Dropbox/backup/loopgotowhile-site.git')
@@ -72,8 +72,8 @@ def publish():
     with settings(warn_only=True):
         run('killall -9 -v LGWServer ')
         run('killall -9 -v cpulimit ')
-    backup()
-    compile(False)
+    #backup()
+    #compile(False)
     copy(DEPLOY_PATH)
     project.rsync_project(
         remote_dir=DEST_PATH,
@@ -82,9 +82,9 @@ def publish():
     )
     update_nginx_conf()
     # Limit cpu usage (cpulimit must be installed on remote)
-    run('nohup cpulimit -e LGWServer -l 50 >& /dev/null < /dev/null &')
+    run('nohup cpulimit -e LGWServer -l 80 >& /dev/null < /dev/null &')
     run('sleep 1s')
     # Run LGWServer in background and limit heap size
     #run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -N -M40m -RTS >& /dev/null < /dev/null &')
-    run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -M40m -RTS >& /dev/null < /dev/null &')
+    run('nohup ' + os.path.join(DEST_PATH, 'LGWServer') + ' +RTS -M25m -RTS >& /dev/null < /dev/null &')
     run('sleep 1s')

@@ -34,7 +34,7 @@ import qualified Language.LoopGotoWhile.While.Transform as WhileT
 main :: IO ()
 main = do
     args <- getArgs
-    mvars <- replicateM numCapabilities newEmptyMVar
+    mvars <- replicateM 3 newEmptyMVar
     simpleHTTP myConf $ msum $ [ lgwHandlers mvars ] 
                             ++ if "test" `elem` args then [testHandlers] else []
                             ++ [ notFoundHandler ]
